@@ -9,6 +9,8 @@ const corsOptions = {
   
 };
 
+const path = require('path')
+
 
 const app = express();
 
@@ -52,7 +54,14 @@ mongoose.connect(URI, {
     console.log("Database Connected!!")
 })
 
-const port = process.env.PORT || 8080;
+if(process.env.NODE_ENV === 'production'){
+  app.use(express.static('client/build'))
+  app.get('*', (req, res) => {
+      res.sendFile(path.join(__dirname, 'client', 'build', 'index.html'))
+  })
+}
+
+const port = process.env.PORT || 5000;
 http.listen(port, () => {
   console.log("Listening on ", port);
 });
