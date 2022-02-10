@@ -1,3 +1,3 @@
 
-# Source code for the WidenOut Web App and server:
+# Source code for the WidenOut Web App and server
 
