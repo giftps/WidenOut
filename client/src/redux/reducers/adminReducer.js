@@ -3,12 +3,14 @@ import { DeleteData } from "../actions/globalTypes";
 
 const initialState = {
     total_users: 0,
+    total_groups: 0,
     total_posts: 0,
     total_comments: 0,
     total_likes: 0,
     total_active_users: 0,
     total_spam_posts: 0,
-    spam_posts : []
+    spam_posts : [],
+    groups: [],
 };
 
 const authReducer = (state = initialState, action) => {
@@ -18,6 +20,18 @@ const authReducer = (state = initialState, action) => {
         ...state,
         total_users: action.payload.total_users,
       };
+
+    case ADMIN_TYPES.GET_TOTAL_GROUPS:
+      return {
+        ...state,
+        total_groups: action.payload.total_groups,
+      };
+
+      case ADMIN_TYPES.CREATE_GROUP:
+        return {
+          ...state,
+          groups: [action.payload, ...state.groups],
+        };
 
     case ADMIN_TYPES.GET_TOTAL_POSTS:
       return {

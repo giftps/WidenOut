@@ -16,6 +16,8 @@ import { getPosts } from "./redux/actions/postAction";
 import { getSuggestions } from "./redux/actions/suggestionsAction";
 import { getNotifies } from "./redux/actions/notifyAction";
 
+import { getAllGroups } from "./redux/actions/groupAction";
+
 import AdminDashboard from "./pages/adminDashboard";
 import { GLOBALTYPES } from "./redux/actions/globalTypes";
 import SocketClient from "./SocketClient";
@@ -38,6 +40,7 @@ function App() {
       dispatch(getPosts(auth.token));
       dispatch(getSuggestions(auth.token));
       dispatch(getNotifies(auth.token));
+      dispatch(getAllGroups(auth.token));
     }
   }, [dispatch, auth.token]);
 

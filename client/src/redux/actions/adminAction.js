@@ -1,9 +1,10 @@
 import { GLOBALTYPES } from "./globalTypes";
-import { getDataAPI, deleteDataAPI } from "../../utils/fetchData";
+import { getDataAPI, deleteDataAPI, postDataAPI } from "../../utils/fetchData";
 import { createNotify } from "./notifyAction";
 
 export const ADMIN_TYPES = {
   GET_TOTAL_USERS: "GET_TOTAL_USERS",
+  GET_TOTAL_GROUPS: "GET_TOTAL_GROUPS",
   GET_TOTAL_POSTS: "GET_TOTAL_POSTS",
   GET_TOTAL_COMMENTS: "GET_TOTAL_COMMENTS",
   GET_TOTAL_LIKES: "GET_TOTAL_LIKES",
@@ -12,9 +13,8 @@ export const ADMIN_TYPES = {
   GET_SPAM_POSTS: "GET_SPAM_POSTS",
   LOADING_ADMIN: "LOADING_ADMIN",
   DELETE_POST: "DELETE_POST",
+  CREATE_GROUP: "CREATE_GROUP",
 };
-
-
 
 export const getTotalUsers = (token) => async (dispatch) => {
   try {
@@ -33,6 +33,22 @@ export const getTotalUsers = (token) => async (dispatch) => {
   }
 };
 
+export const getTotalGroups = (token) => async (dispatch) => {
+  try {
+    dispatch({ type: ADMIN_TYPES.LOADING_ADMIN, payload: true });
+    const res = await getDataAPI("get_total_groups", token);
+    dispatch({ type: ADMIN_TYPES.GET_TOTAL_GROUPS, payload: res.data });
+
+    dispatch({ type: ADMIN_TYPES.LOADING_ADMIN, payload: false });
+  } catch (err) {
+    dispatch({
+      type: GLOBALTYPES.ALERT,
+      payload: {
+        error: err.response.data.msg,
+      },
+    });
+  }
+};
 
 export const getTotalPosts = (token) => async (dispatch) => {
   try {
@@ -51,8 +67,6 @@ export const getTotalPosts = (token) => async (dispatch) => {
   }
 };
 
-
-
 export const getTotalComments = (token) => async (dispatch) => {
   try {
     dispatch({ type: ADMIN_TYPES.LOADING_ADMIN, payload: true });
@@ -69,7 +83,6 @@ export const getTotalComments = (token) => async (dispatch) => {
     });
   }
 };
-
 
 export const getTotalLikes = (token) => async (dispatch) => {
   try {
@@ -109,7 +122,7 @@ export const getSpamPosts = (token) => async (dispatch) => {
   try {
     dispatch({ type: ADMIN_TYPES.LOADING_ADMIN, payload: true });
     const res = await getDataAPI("get_spam_posts", token);
-    
+
     dispatch({ type: ADMIN_TYPES.GET_SPAM_POSTS, payload: res.data.spamPosts });
 
     dispatch({ type: ADMIN_TYPES.LOADING_ADMIN, payload: false });
@@ -154,7 +167,7 @@ export const deleteSpamPost = ({ post, auth, socket }) => async (dispatch) => {
   }
 };
 
-export const getTotalActiveUsers = ({auth, socket}) => async (dispatch) => {
+export const getTotalActiveUsers = ({ auth, socket }) => async (dispatch) => {
   try {
     socket.emit('getActiveUsers', auth.user._id);
   } catch (err) {
@@ -166,3 +179,57 @@ export const getTotalActiveUsers = ({auth, socket}) => async (dispatch) => {
     });
   }
 };
+
+// export const createGroup = ({data, socket}) => async (dispatch) => {
+// //  console.log(jwt)
+//   try {
+//     dispatch({ type: GLOBALTYPES.ALERT, payload: { loading: true } });
+
+//     const res = await postDataAPI("create_group", data);
+
+//     dispatch({ type: GLOBALTYPES.ALERT, payload: { success: res.data.msg } });
+//   } catch (err) {
+//     dispatch({
+//       type: GLOBALTYPES.ALERT,
+//       payload: { error: err.response.data.msg },
+//     });
+//   }
+// };
+
+export const createGroup = ({ name, about, auth, socket }) => async dispatch => {
+  try {
+    dispatch({ type: GLOBALTYPES.ALERT, payload: { loading: true } });
+
+    const res = await postDataAPI('create_group', { name, about }, auth.token);
+
+
+    dispatch({ type: ADMIN_TYPES.CREATE_GROUP, payload: { ...res.data.newGroup, user: auth.user } });
+
+    dispatch({ type: GLOBALTYPES.ALERT, payload: { loading: false } });
+
+    dispatch({ type: GLOBALTYPES.ALERT, payload: { success: res.data.msg } })
+
+
+    // todo notification
+    const msg = {
+      id: res.data.newGroup._id,
+      text: "Added a new post.",
+      // recipients: res.data.newGroup.user.members,
+      url: `/post/${res.data.newGroup._id}`,
+      name,
+      about
+    };
+
+    // dispatch(createNotify({ msg, auth, socket }));
+    console.log(msg)
+
+  } catch (err) {
+    console.log(err)
+    dispatch({
+      type: GLOBALTYPES.ALERT,
+      payload: {
+        error: err.response.data.msg
+      }
+    })
+  }
+}
