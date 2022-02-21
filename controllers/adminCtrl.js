@@ -60,8 +60,8 @@ const adminCtrl = {
   getTotalSpamPosts: async (req, res) => {
     try {
       const posts = await Posts.find();
-      
-      const reportedPosts = await posts.filter(post => post.reports.length>2);
+
+      const reportedPosts = await posts.filter(post => post.reports.length > 2);
       const total_spam_posts = reportedPosts.length;
       res.json({ total_spam_posts });
     } catch (err) {
@@ -75,7 +75,7 @@ const adminCtrl = {
         .select("user createdAt reports content")
         .populate({ path: "user", select: "username avatar email" });
       const spamPosts = posts.filter((post) => post.reports.length > 1);
-      
+
       res.json({ spamPosts });
     } catch (err) {
       return res.status(500).json({ msg: err.message });
@@ -95,6 +95,30 @@ const adminCtrl = {
       return res.status(500).json({ msg: err.message });
     }
   },
+
+  createGroup: async (req, res) => {
+    try {
+      const { name, about } = req.body;
+
+      const newGroup = new Groups({
+        name,
+        about,
+      });
+      await newGroup.save();
+
+      res.json({
+        msg: "Group created successfully.",
+        newGroup: {
+          ...newGroup._doc,
+          // user: req.user
+        }
+      });
+    } catch (err) {
+      return res.status(500).json({ msg: err.message });
+    }
+  },
+
+
 };
 
 module.exports = adminCtrl;

@@ -10,6 +10,7 @@ router.get("/get_total_likes", auth, adminCtrl.getTotalLikes);
 router.get("/get_total_spam_posts", auth, adminCtrl.getTotalSpamPosts);
 router.get("/get_spam_posts", auth, adminCtrl.getSpamPosts);
 router.delete("/delete_spam_posts/:id", auth, adminCtrl.deleteSpamPost);
+router.post("/create_group", auth, adminCtrl.createGroup);
 
 
 module.exports = router;

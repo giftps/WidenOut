@@ -6,6 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { getPosts } from '../../redux/actions/postAction';
 import { getSuggestions } from '../../redux/actions/suggestionsAction';
 
+import { getAllGroups } from '../../redux/actions/groupAction';
 
 const Header = () => {
   const { auth } = useSelector(state => state);
@@ -15,6 +16,7 @@ const Header = () => {
     window.scrollTo({top: 0})
     dispatch(getPosts(auth.token));
     dispatch(getSuggestions(auth.token));
+    dispatch(getAllGroups(auth.token));
   };
 
   return (

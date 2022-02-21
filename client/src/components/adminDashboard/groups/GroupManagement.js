@@ -1,7 +1,7 @@
 import React from 'react';
 import "../main/Main.css";
 import { useSelector } from "react-redux";
-import CreateAdmin from "./CreateAdmin";
+import CreateGroup from "./CreateGroup";
 
 const AdminManagement = () => {
         const { auth } = useSelector((state) => state);
@@ -14,7 +14,7 @@ const AdminManagement = () => {
               <p>Welcome to your Admin Management</p>
             </div>
           </div>
-          <CreateAdmin />
+          <CreateGroup />
         </div>
       </div>
     );
