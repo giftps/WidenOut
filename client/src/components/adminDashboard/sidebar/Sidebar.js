@@ -7,6 +7,7 @@ import Main from "../main/Main";
 import AdminManagement from "../adminManagement/AdminManagement";
 import Spam from "../spamManagement/Spam";
 import UsersManagement from "../usersManagement/UsersManagement";
+import GroupManagement from "../groups/GroupManagement";
 
 
 const Sidebar = () => {
@@ -20,6 +21,7 @@ const Sidebar = () => {
       {adminMenu === 2 && <AdminManagement />}
       {adminMenu === 3 && <Spam />}
       {adminMenu === 4 && <UsersManagement />}
+      {adminMenu === 5 && <GroupManagement />}
 
       <div className="sidebar_responsive" id="sidebar">
         <div className="sidebar__title">
@@ -59,14 +61,21 @@ const Sidebar = () => {
             <i className="fa fa-wrench"></i>
             <a href="#">Users Management</a>
           </div>
-          <div className="sidebar__link">
+          <div
+            className={`sidebar__link ${adminMenu === 5 && "active_menu_link"}`}
+            onClick={() => setAdminMenu(5)}
+          >
+            <i className="fa fa-wrench"></i>
+            <a href="#">Groups</a>
+          </div>
+          {/* <div className="sidebar__link">
             <i className="fa fa-archive"></i>
             <a href="#">xyz</a>
           </div>
           <div className="sidebar__link">
             <i className="fa fa-handshake-o"></i>
             <a href="#">xyz</a>
-          </div>
+          </div> */}
 
           <div className="sidebar__logout">
             <i className="fa fa-power-off"></i>

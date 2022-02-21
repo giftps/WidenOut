@@ -5,6 +5,7 @@ import { useSelector, useDispatch } from "react-redux";
 // import Chart from "../charts/Chart";
 import {
   getTotalUsers,
+  getTotalGroups,
   getTotalPosts,
   getTotalComments,
   getTotalLikes,
@@ -19,6 +20,7 @@ const Main = () => {
 
     useEffect(() => {
       dispatch(getTotalUsers(auth.token));
+      dispatch(getTotalGroups(auth.token));
       dispatch(getTotalPosts(auth.token));
       dispatch(getTotalComments(auth.token));
       dispatch(getTotalLikes(auth.token));
@@ -52,6 +54,19 @@ const Main = () => {
               <span className="font-bold text-title">{admin.total_users}</span>
             </div>
           </div>
+
+          <div className="card_admin">
+            <i
+              className="fa fa-users fa-2x text-lightblue"
+              aria-hidden="true"
+            ></i>
+            <div className="card_inner_admin">
+              <p className="text-primary-p">Total Groups</p>
+              <span className="font-bold text-title">{admin.total_groups}</span>
+            </div>
+          </div>
+          {console.log(admin.total_users)}
+          {console.log(admin.total_groups)}
 
           <div className="card_admin">
             <i className="fa fa-comments fa-2x text-red" aria-hidden="true"></i>
@@ -110,52 +125,6 @@ const Main = () => {
         </div>
         {/* <!-- MAIN CARDS ENDS HERE --> */}
 
-        {/* <!-- CHARTS STARTS HERE 
-        <div className="charts">
-          <div className="charts__left">
-            <div className="charts__left__title">
-              <div>
-                <h1>Daily Reports</h1>
-                <p>Cupertino, California, USA</p>
-              </div>
-              <i className="fa fa-usd" aria-hidden="true"></i>
-            </div>
-            <Chart />
-          </div>
-
-          <div className="charts__right">
-            <div className="charts__right__title">
-              <div>
-                <h1>Stats Reports</h1>
-                <p>Cupertino, California, USA</p>
-              </div>
-              <i className="fa fa-usd" aria-hidden="true"></i>
-            </div>
-
-            <div className="charts__right__cards">
-              <div className="card1">
-                <h1>Income</h1>
-                <p>$75,300</p>
-              </div>
-
-              <div className="card2">
-                <h1>Sales</h1>
-                <p>$124,200</p>
-              </div>
-
-              <div className="card3">
-                <h1>Users</h1>
-                <p>3900</p>
-              </div>
-
-              <div className="card4">
-                <h1>Orders</h1>
-                <p>1881</p>
-              </div>
-            </div>
-          </div>
-        </div>
-        CHARTS ENDS HERE --> */}
       </div>
     </div>
   );

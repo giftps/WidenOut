@@ -1,5 +1,6 @@
 const Posts = require("../models/postModel");
 const Users = require("../models/userModel");
+const Groups = require("../models/groupModel");
 const Comments = require("../models/commentModel");
 const { post } = require("../routes/adminRouter");
 
@@ -10,6 +11,16 @@ const adminCtrl = {
       const users = await Users.find();
       const total_users = users.length;
       res.json({ total_users });
+    } catch (err) {
+      return res.status(500).json({ msg: err.message });
+    }
+  },
+
+  getTotalGroups: async (req, res) => {
+    try {
+      const groups = await Groups.find();
+      const total_groups = groups.length;
+      res.json({ total_groups });
     } catch (err) {
       return res.status(500).json({ msg: err.message });
     }

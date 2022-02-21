@@ -4,6 +4,7 @@ import { createNotify } from "./notifyAction";
 
 export const ADMIN_TYPES = {
   GET_TOTAL_USERS: "GET_TOTAL_USERS",
+  GET_TOTAL_GROUPS: "GET_TOTAL_GROUPS",
   GET_TOTAL_POSTS: "GET_TOTAL_POSTS",
   GET_TOTAL_COMMENTS: "GET_TOTAL_COMMENTS",
   GET_TOTAL_LIKES: "GET_TOTAL_LIKES",
@@ -21,6 +22,23 @@ export const getTotalUsers = (token) => async (dispatch) => {
     dispatch({ type: ADMIN_TYPES.LOADING_ADMIN, payload: true });
     const res = await getDataAPI("get_total_users", token);
     dispatch({ type: ADMIN_TYPES.GET_TOTAL_USERS, payload: res.data });
+
+    dispatch({ type: ADMIN_TYPES.LOADING_ADMIN, payload: false });
+  } catch (err) {
+    dispatch({
+      type: GLOBALTYPES.ALERT,
+      payload: {
+        error: err.response.data.msg,
+      },
+    });
+  }
+};
+
+export const getTotalGroups = (token) => async (dispatch) => {
+  try {
+    dispatch({ type: ADMIN_TYPES.LOADING_ADMIN, payload: true });
+    const res = await getDataAPI("get_total_groups", token);
+    dispatch({ type: ADMIN_TYPES.GET_TOTAL_GROUPS, payload: res.data });
 
     dispatch({ type: ADMIN_TYPES.LOADING_ADMIN, payload: false });
   } catch (err) {
