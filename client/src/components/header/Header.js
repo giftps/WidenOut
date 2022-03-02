@@ -7,6 +7,7 @@ import { getPosts } from '../../redux/actions/postAction';
 import { getSuggestions } from '../../redux/actions/suggestionsAction';
 
 import { getAllGroups } from '../../redux/actions/groupAction';
+import { getgPosts } from "../../redux/actions/groupPostAction";
 
 const Header = () => {
   const { auth } = useSelector(state => state);
@@ -17,6 +18,7 @@ const Header = () => {
     dispatch(getPosts(auth.token));
     dispatch(getSuggestions(auth.token));
     dispatch(getAllGroups(auth.token));
+    dispatch(getgPosts(auth.token));
   };
 
   return (

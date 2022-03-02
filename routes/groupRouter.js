@@ -4,4 +4,6 @@ const groupCtrl = require('../controllers/groupCtrl');
 
 router.get("/all_groups", auth, groupCtrl.allGroups);
 
+router.get('/group/:id', auth, groupCtrl.getGroup);
+
 module.exports = router;

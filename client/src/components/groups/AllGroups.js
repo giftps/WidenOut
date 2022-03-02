@@ -22,7 +22,7 @@ const AllGroups = () => {
                         {
                             groups.groups.map(group => (
                                 <Link
-                                    to={`/group`}
+                                    to={`/group/${group._id}`}
                                     // onClick={handleCloseAll}
                                     style={{ textDecoration: "none" }}
                                 >

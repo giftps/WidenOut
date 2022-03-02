@@ -41,6 +41,7 @@ app.use('/api', require('./routes/adminRouter'));
 app.use('/api', require('./routes/notifyRouter'));
 app.use('/api', require('./routes/messageRouter'));
 app.use('/api', require('./routes/groupRouter'));
+app.use('/api', require('./routes/gPostRouter'));
 //#endregion
 
 

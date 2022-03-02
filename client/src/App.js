@@ -17,6 +17,7 @@ import { getSuggestions } from "./redux/actions/suggestionsAction";
 import { getNotifies } from "./redux/actions/notifyAction";
 
 import { getAllGroups } from "./redux/actions/groupAction";
+import { getgPosts } from "./redux/actions/groupPostAction";
 
 import AdminDashboard from "./pages/adminDashboard";
 import { GLOBALTYPES } from "./redux/actions/globalTypes";
@@ -41,6 +42,7 @@ function App() {
       dispatch(getSuggestions(auth.token));
       dispatch(getNotifies(auth.token));
       dispatch(getAllGroups(auth.token));
+      dispatch(getgPosts(auth.token));
     }
   }, [dispatch, auth.token]);
 

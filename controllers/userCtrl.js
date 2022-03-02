@@ -1,4 +1,5 @@
 const Users = require("../models/userModel");
+const Groups = require("../models/groupModel");
 
 const userCtrl = {
   searchUser: async (req, res) => {
@@ -22,7 +23,7 @@ const userCtrl = {
         .populate("followers following", "-password");
 
       if (!user) {
-        return res.status(400).json({ msg: "requested user does not exist." });
+        return res.status(400).json({ msg: "Requested user does not exist.." });
       }
 
       res.json({ user });

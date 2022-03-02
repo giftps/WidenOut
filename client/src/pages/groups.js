@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
 
 import AllGroups from '../components/groups/AllGroups'
-import Posts from '../components/home/Posts'
+import GPosts from '../components/home/GPosts'
 import RightSideBarGroup from '../components/home/RightSideBarGroup'
 
 import { useSelector } from 'react-redux'
@@ -11,7 +11,7 @@ import LoadIcon from '../images/loading.gif'
 let scroll = 0;
 
 const Home = () => {
-    const { homePosts } = useSelector(state => state)
+    const { ghomePosts } = useSelector(state => state)
 
     window.addEventListener('scroll', () => {
         if(window.location.pathname === '/'){
@@ -31,13 +31,15 @@ const Home = () => {
             <div className="col-md-8">
                 <AllGroups />
 
+                {console.log(ghomePosts)}
+
                 {
-                    homePosts.loading 
+                    ghomePosts.loading 
                     ? <img src={LoadIcon} alt="loading" className="d-block mx-auto" />
-                    : (homePosts.result === 0 && homePosts.posts.length === 0)
+                    : (ghomePosts.result === 0 && ghomePosts.posts.length === 0)
                         ? <h5 className="text-center container my-4">There's no activity from your groups. 
-                            Find some cool groups to joing and the activity will show here</h5>
-                        : <Posts />
+                            Find some cool groups to join and the activity will show here</h5>
+                        : <GPosts />
                 }
                 
             </div>
