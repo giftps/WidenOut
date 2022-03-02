@@ -26,6 +26,9 @@ import FormControl from "@mui/material/FormControl";
 import FormLabel from "@mui/material/FormLabel";
 import SwipeableViews from "react-swipeable-views";
 
+// ** Import Global types
+import { GLOBALTYPES } from "../redux/actions/globalTypes";
+
 import "@fontsource/roboto/300.css";
 import "@fontsource/roboto/400.css";
 import "@fontsource/roboto/500.css";
@@ -194,6 +197,7 @@ const Register = () => {
   const history = useHistory();
 
   const [questionIndex, setQuestionIndex] = React.useState(0);
+  const [isDone, setIsDone] = React.useState(false);
 
   const steps = ["Welcome", "Quiz", "Personal info"];
 
@@ -203,7 +207,7 @@ const Register = () => {
   const initialState = {
     fullname: "",
     username: "",
-    email: "",
+    email: "", 
     password: "",
     cf_password: "",
     gender: "male",
@@ -236,6 +240,30 @@ const Register = () => {
   };
 
   const handleQuestionSubmit = () => {
+    if(Question1!=='B'){
+      dispatch({ type: GLOBALTYPES.ALERT, payload: { error: "Question 1 is wrong try again" } });
+    }else if(Question2 !=='B'){
+      dispatch({ type: GLOBALTYPES.ALERT, payload: { error: "Question 2 is wrong try again" } });
+
+    }else if(Question3 !=='C'){
+      dispatch({ type: GLOBALTYPES.ALERT, payload: { error: "Question 3 is wrong try again" } });
+      
+    }else if(Question4 !=='D'){
+      dispatch({ type: GLOBALTYPES.ALERT, payload: { error: "Question 4 is wrong try again" } });
+
+    }else{
+      setIsDone(true)
+      dispatch({ type: GLOBALTYPES.ALERT, payload: { succuss: "Great! all questions are collect" } });
+
+      let newSkipped = skipped;
+      if (isStepSkipped(activeStep)) {
+        newSkipped = new Set(newSkipped.values());
+        newSkipped.delete(activeStep);
+      }
+  
+      setActiveStep((prevActiveStep) => prevActiveStep + 1);
+      setSkipped(newSkipped);
+    }
     console.log(Question1);
     console.log(Question2);
     console.log(Question3);
@@ -266,14 +294,18 @@ const Register = () => {
   };
 
   const handleNext = () => {
-    let newSkipped = skipped;
-    if (isStepSkipped(activeStep)) {
-      newSkipped = new Set(newSkipped.values());
-      newSkipped.delete(activeStep);
+    if(activeStep === 0 && !isDone){
+      let newSkipped = skipped;
+      if (isStepSkipped(activeStep)) {
+        newSkipped = new Set(newSkipped.values());
+        newSkipped.delete(activeStep);
+      }
+  
+      setActiveStep((prevActiveStep) => prevActiveStep + 1);
+      setSkipped(newSkipped);
+    }else{
+      dispatch({ type: GLOBALTYPES.ALERT, payload: { error: "Please make sure you answer all the question" } });
     }
-
-    setActiveStep((prevActiveStep) => prevActiveStep + 1);
-    setSkipped(newSkipped);
   };
 
   const handleBack = () => {
@@ -410,22 +442,22 @@ const Register = () => {
                               onChange={handleQuestion1Change}
                             >
                               <FormControlLabel
-                                value="q1A"
+                                value="A"
                                 control={<Radio />}
                                 label="A.	Every scripture"
                               />
                               <FormControlLabel
-                                value="q1B"
+                                value="B"
                                 control={<Radio />}
                                 label="B. All scripture"
                               />
                               <FormControlLabel
-                                value="q1C"
+                                value="C"
                                 control={<Radio />}
                                 label="C. Any scripture"
                               />
                               <FormControlLabel
-                                value="q1D"
+                                value="D"
                                 control={<Radio />}
                                 label="D. Each scripture"
                               />
@@ -455,22 +487,22 @@ const Register = () => {
                               onChange={handleQuestion2Change}
                             >
                               <FormControlLabel
-                                value="q2A"
+                                value="A"
                                 control={<Radio />}
                                 label="A. We go to heaven"
                               />
                               <FormControlLabel
-                                value="q2B"
+                                value="B"
                                 control={<Radio />}
                                 label="B. We are conscious of nothing "
                               />
                               <FormControlLabel
-                                value="q2C"
+                                value="C"
                                 control={<Radio />}
                                 label="C. We are reincarnated into a different lifeform"
                               />
                               <FormControlLabel
-                                value="q2D"
+                                value="D"
                                 control={<Radio />}
                                 label="D. We turn into angels"
                               />
@@ -502,22 +534,22 @@ const Register = () => {
                               onChange={handleQuestion3Change}
                             >
                               <FormControlLabel
-                                value="q3A"
+                                value="A"
                                 control={<Radio />}
                                 label="A. Searching for"
                               />
                               <FormControlLabel
-                                value="q3B"
+                                value="B"
                                 control={<Radio />}
                                 label="B. Inviting "
                               />
                               <FormControlLabel
-                                value="q3C"
+                                value="C"
                                 control={<Radio />}
                                 label="C. Seeking first"
                               />
                               <FormControlLabel
-                                value="q4D"
+                                value="D"
                                 control={<Radio />}
                                 label="D. Praying for"
                               />
@@ -547,22 +579,22 @@ const Register = () => {
                               onChange={handleQuestion4Change}
                             >
                               <FormControlLabel
-                                value="q4A"
+                                value="A"
                                 control={<Radio />}
                                 label="A.	Joseph"
                               />
                               <FormControlLabel
-                                value="q4B"
+                                value="B"
                                 control={<Radio />}
                                 label="B. Mattew"
                               />
                               <FormControlLabel
-                                value="q4C"
+                                value="C"
                                 control={<Radio />}
                                 label="C. Luke"
                               />
                               <FormControlLabel
-                                value="q4D"
+                                value="D"
                                 control={<Radio />}
                                 label="D. Caleb"
                               />
