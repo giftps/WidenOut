@@ -62,10 +62,11 @@ const gPostCtrl = {
       // ).paginating();
 
       const posts = await Posts.find({
-        user: "61f527498a92cc63c4c4b089",
+        user: [...req.user.groups, req.user._id],
+        // user: "6221ce83a6f6ea5d8c80a475",
       })
         .sort("-createdAt")
-        // .populate("user likes", "avatar username fullname followers")
+        .populate("user likes", "avatar username fullname followers")
         .populate({
           path: "comments",
           populate: {
