@@ -75,7 +75,8 @@ const userCtrl = {
         { _id: req.params.id },
         {
           $push: {
-            followers: req.user._id
+            followers: req.user._id,
+            members: req.user._id
           },
         },
         { new: true }
@@ -83,7 +84,12 @@ const userCtrl = {
 
       await Users.findOneAndUpdate(
         { _id: req.user._id },
-        { $push: { following: req.params.id } },
+        { 
+          $push: { 
+            following: req.params.id,
+            groups: req.params.id 
+          },
+        },
         { new: true }
       );
 

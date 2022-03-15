@@ -2,16 +2,16 @@ const Posts = require("../models/postModel");
 const Comments = require("../models/commentModel");
 const Users = require("../models/userModel");
 
-class APIfeatures  {
-  constructor(query, queryString){
+class APIfeatures {
+  constructor(query, queryString) {
     this.query = query;
     this.queryString = queryString;
   }
 
-  paginating(){
-    const page = this.queryString.page * 1 || 1; 
+  paginating() {
+    const page = this.queryString.page * 1 || 1;
     const limit = this.queryString.limit * 1 || 9;
-    const skip = (page -1) * limit; 
+    const skip = (page - 1) * limit;
     this.query = this.query.skip(skip).limit(limit);
     return this;
   }
@@ -33,12 +33,12 @@ const gPostCtrl = {
       });
       await newPost.save();
 
-      res.json({ 
-        msg: "Post created successfully.", 
+      res.json({
+        msg: "Post created successfully.",
         newPost: {
           ...newPost._doc,
           user: req.user
-        } 
+        }
       });
     } catch (err) {
       return res.status(500).json({ msg: err.message });
@@ -47,15 +47,26 @@ const gPostCtrl = {
 
   getgPosts: async (req, res) => {
     try {
-      const features = new APIfeatures(
-        Posts.find({
-          user: [...req.user.following, req.user._id],
-        }),
-        req.query
-      ).paginating();
-      const posts = await features.query
+      // const features = new APIfeatures(
+      //   Posts.find({
+      //     user: [...req.user.following, req.user._id],
+      //   }),
+      //   req.query
+      // ).paginating();
+
+      // const features = new APIfeatures(
+      //   Posts.find({
+      //     user: [...req.user.following, req.user._id],
+      //   }),
+      //   req.query
+      // ).paginating();
+
+      const posts = await Posts.find({
+        user: [...req.user.groups, req.user._id],
+        // user: "6221ce83a6f6ea5d8c80a475",
+      })
         .sort("-createdAt")
-        // .populate("user likes", "avatar username fullname followers")
+        .populate("user likes", "avatar username fullname followers")
         .populate({
           path: "comments",
           populate: {
@@ -232,12 +243,12 @@ const gPostCtrl = {
 
       await Comments.deleteMany({ _id: { $in: post.comments } });
 
-      res.json({ 
+      res.json({
         msg: "Post deleted successfully.",
         newPost: {
           ...post,
           user: req.user
-        } 
+        }
       });
     } catch (err) {
       return res.status(500).json({ msg: err.message });
@@ -332,7 +343,7 @@ const gPostCtrl = {
 
   getSavePost: async (req, res) => {
     try {
-      const features = new APIfeatures(Posts.find({_id: {$in: req.user.saved}}), req.query).paginating();
+      const features = new APIfeatures(Posts.find({ _id: { $in: req.user.saved } }), req.query).paginating();
 
       const savePosts = await features.query.sort("-createdAt");
 

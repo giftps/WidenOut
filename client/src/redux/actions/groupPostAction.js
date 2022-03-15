@@ -58,7 +58,7 @@ export const getgPosts = (token) => async dispatch => {
     try {
         // dispatch({ type: POST_G_TYPES.LOADING_G_POST, payload: true  });
         const res = await getDataAPI('g_posts', token);
-        console.log(res);
+        // console.log(res);
         dispatch({ type: POST_G_TYPES.GET_G_POSTS, payload: {...res.data, page: 2} });
         
         dispatch({ type: POST_G_TYPES.LOADING_G_POST, payload: false });
