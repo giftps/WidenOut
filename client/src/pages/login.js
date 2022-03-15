@@ -1,129 +1,153 @@
-import React, { useState, useEffect } from "react";
-import { Link, useHistory } from "react-router-dom";
+import * as React from 'react';
+import Avatar from '@mui/material/Avatar';
+import Button from '@mui/material/Button';
+import CssBaseline from '@mui/material/CssBaseline';
+import TextField from '@mui/material/TextField';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import Checkbox from '@mui/material/Checkbox';
+import Link from '@mui/material/Link';
+import Grid from '@mui/material/Grid';
+import Box from '@mui/material/Box';
+import Typography from '@mui/material/Typography';
+import Container from '@mui/material/Container';
+import { createTheme, ThemeProvider } from '@mui/material/styles';
+import Divider from '@mui/material/Divider';
+import SocialFacebook from '../components/socialButtons/facebook'
+import SocialGoogle from '../components/socialButtons/google'
 import { adminLogin, login } from "../redux/actions/authAction";
 import { useDispatch, useSelector } from "react-redux";
+import { useHistory } from "react-router-dom";
 
-const Login = () => {
+function Copyright(props) {
+  return (
+    <Typography variant="body2" color="text.secondary" align="center" {...props}>
+      {'Copyright © '}
+      WidenOut{' '}
+      {new Date().getFullYear()}
+      {'.'}
+    </Typography>
+  );
+}
+
+const theme = createTheme();
+
+export default function Login() {
   const initialState = { email: "", password: "" };
-  const [userData, setUserData] = useState(initialState);
-  const [userType, setUserType] = useState(false);
+  const [userData, setUserData] = React.useState(initialState);
+  const [userType, setUserType] = React.useState(false);
   const { email, password } = userData;
 
-  const wno_logo = "https://res.cloudinary.com/exodussoftware/image/upload/v1642853916/widenout/logos/va6p2luteiqkyf9wlvuh.jpg"
 
-
-  const [typePass, setTypePass] = useState(false);
+  const [typePass, setTypePass] = React.useState(false);
 
   const { auth } = useSelector((state) => state);
 
   const dispatch = useDispatch();
   const history = useHistory();
 
-  useEffect(() => {
+  React.useEffect(() => {
     if (auth.token) history.push("/");
   }, [auth.token, history]);
 
-  const handleChangeInput = (e) => {
-    const { name, value } = e.target;
-    setUserData({ ...userData, [name]: value });
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    const data = new FormData(event.currentTarget);
+    // eslint-disable-next-line no-console
     if (!userType) {
-      dispatch(login(userData));
+      dispatch(login({
+        email: data.get('email'),
+        password: data.get('password'),
+      }));
     } else {
-      dispatch(adminLogin(userData));
+      dispatch(adminLogin({
+        email: data.get('email'),
+        password: data.get('password'),
+      }));
     }
+
   };
 
   return (
-    <div className="auth_page">
-      <form onSubmit={handleSubmit} className="inner-shadow">
-        <h3 className="text-uppercase text-center mb-4 auth-heading ">
-          <img src={wno_logo} alt="logo" width="200" />
-        </h3>
-        <div className="mb-3">
-          <label htmlFor="exampleInputEmail1" className="form-label">
-            Email address
-          </label>
-          <div className="outer-shadow hover-in-shadow form-input-wrap">
-            <input
-              type="email"
-              className="form-control "
-              id="exampleInputEmail1"
-              aria-describedby="emailHelp"
-              onChange={handleChangeInput}
-              value={email}
-              name="email"
-            />
-          </div>
-          <div id="emailHelp" className="form-text">
-            We'll never share your email with anyone else.
-          </div>
-        </div>
-        <div className="mb-3">
-          <label htmlFor="exampleInputPassword1" className="form-label">
-            Password
-          </label>
-          <div className="pass">
-            <div className="outer-shadow hover-in-shadow form-input-wrap">
-              <input
-                type={typePass ? "text" : "password"}
-                className="form-control"
-                id="exampleInputPassword1"
-                onChange={handleChangeInput}
-                value={password}
-                name="password"
-              />
-              <small onClick={() => setTypePass(!typePass)}>
-                {typePass ? "Hide" : "Show"}
-              </small>
-            </div>
-          </div>
-        </div>
-
-        <div className="d-flex justify-content-evenly  mx-0 mb-4">
-          <label htmlFor="User">
-            User:
-            <input
-              type="radio"
-              id="User"
-              name="gender"
-              value={userType}
-              defaultChecked
-              onClick={() => setUserType(false)}
-            />
-          </label>
-
-          <label htmlFor="Admin">
-            Admin:
-            <input
-              type="radio"
-              id="Admin"
-              name="gender"
-              value={userType}
-              onClick={() => setUserType(true)}
-            />
-          </label>
-        </div>
-
-        <button
-          type="submit"
-          className="btn-1 w-100 d-flex outer-shadow hover-in-shadow justify-content-center"
-          disabled={email && password ? false : true}
+    <ThemeProvider theme={theme}>
+      <Container component="main" maxWidth="xs">
+        <CssBaseline />
+        <Box
+          sx={{
+            paddingTop: 8,
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+          }}
         >
-          Login
-        </button>
-        <p className="my-2">
-          Don't have an account?{" "}
-          <Link to="/register" style={{ color: "crimson" }}>
-            Register Now.
-          </Link>
-        </p>
-      </form>
-    </div>
+          <div style={{ width: 100, height: 100 }}>
+            <img style={{ width: '100%' }} src={'./WidenOut-logo.png'} alt='logo' />
+          </div>
+          <Typography component="h1" variant="h5">
+            WidenOut
+          </Typography>
+          <p component="h6" variant="h6">
+            Sign in
+          </p>
+          <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
+            <TextField
+              margin="normal"
+              required
+              fullWidth
+              id="email"
+              label="Email Address"
+              name="email"
+              autoComplete="email"
+              autoFocus
+            />
+            <TextField
+              margin="normal"
+              required
+              fullWidth
+              name="password"
+              label="Password"
+              type="password"
+              id="password"
+              autoComplete="current-password"
+            />
+            <FormControlLabel
+              control={<Checkbox value="remember" color="primary" />}
+              label="Remember me"
+            />
+            <Button
+              type="submit"
+              fullWidth
+              variant="contained"
+              sx={{ mt: 3, mb: 2 }}
+            >
+              Sign In
+            </Button>
+            <div>
+              <Divider>Or Login with</Divider>
+            </div>
+            <Grid container>
+              <Grid item xs>
+                <SocialFacebook />
+              </Grid>
+              <Grid item xs>
+                <SocialGoogle />
+              </Grid>
+            </Grid>
+            <Grid container>
+              <Grid item xs>
+                <Link href="#" variant="body2">
+                  Forgot password?
+                </Link>
+              </Grid>
+              <Grid item>
+                <Link to="/register" style={{ color: "crimson" }}>
+                  {"Don't have an account? Sign Up"}
+                </Link>
+              </Grid>
+            </Grid>
+          </Box>
+        </Box>
+        <Copyright sx={{ mt: 8, mb: 4 }} />
+      </Container>
+    </ThemeProvider>
   );
-};
-
-export default Login;
+}
