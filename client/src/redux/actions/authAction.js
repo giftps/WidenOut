@@ -178,6 +178,30 @@ export const registerAdmin = (data) => async (dispatch) => {
   }
 };
 
+export const registerGroup = (data) => async (dispatch) => {
+
+  const check = valid(data);
+
+  console.log(check.errMsg);
+
+  if (check.errLength > 0) {
+    return dispatch({ type: GLOBALTYPES.ALERT, payload: check.errMsg });
+  }
+
+  try {
+    dispatch({ type: GLOBALTYPES.ALERT, payload: { loading: true } });
+
+    const res = await postDataAPI("register_group", data);
+
+    dispatch({ type: GLOBALTYPES.ALERT, payload: { success: res.data.msg } });
+  } catch (err) {
+    dispatch({
+      type: GLOBALTYPES.ALERT,
+      payload: { error: err.response.data.msg },
+    });
+  }
+};
+
 export const logout = () => async (dispatch) => {
   try {
     localStorage.removeItem("firstLogin");

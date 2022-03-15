@@ -56,22 +56,22 @@ const Info = ({ id, auth, profile, dispatch }) => {
                       {user._id === auth.user._id ? (
                         <button
                           className="btn-1 outer-shadow hover-in-shadow"
-                          onClick={() => setOnEdit(true)}
-                        >
-                          Edit Profile
-                        </button>
-                      ) : (
-                        <JoinBtn user={user} />
-                      )}
-                      {user._id === auth.user._id ? (
-                        <button
-                          className="btn-1 outer-shadow hover-in-shadow"
                           onClick={() => setChangePassword(true)}
                         >
                           change password
                         </button>
                       ) : (
                         ""
+                      )}
+                      {user._id === auth.user._id ? (
+                        <button
+                          className="btn-1 outer-shadow hover-in-shadow"
+                          onClick={() => setOnEdit(true)}
+                        >
+                          Edit Profile
+                        </button>
+                      ) : (
+                        <JoinBtn user={user} />
                       )}
                     </div>
 
@@ -88,16 +88,6 @@ const Info = ({ id, auth, profile, dispatch }) => {
                       {user.username}{" "}
                       <span className="color-violet">{user.mobile}</span>
                     </h6>
-                    {/* <p className="m-0">{user.address}</p> */}
-                    {/* <h6>{user.email}</h6> */}
-                    {/* <a
-                      style={{ textDecoration: "none" }}
-                      href={user.website}
-                      target="_blank"
-                      rel="noreferrer"
-                    >
-                      {user.website}
-                    </a> */}
                     <p>{user.story}</p>
                   </div>
 

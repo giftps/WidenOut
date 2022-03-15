@@ -25,6 +25,10 @@ const postSchema = new Schema(
       type: mongoose.Types.ObjectId,
       ref: "user",
     },
+    group: {
+      type: mongoose.Types.ObjectId,
+      ref: "user",
+    },
     reports: [
       {
         type: mongoose.Types.ObjectId,

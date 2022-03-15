@@ -1,20 +1,20 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
-import { createGroup } from "../../../redux/actions/adminAction";
+import { registerGroup } from "../../../redux/actions/authAction";
 
-const RegisterAdmin = () => {
-  const { auth, alert, socket } = useSelector((state) => state);
-
+const RegisterGroup = () => {
+  const { auth, alert } = useSelector((state) => state);
   const dispatch = useDispatch();
   const history = useHistory();
 
   const initialState = {
-    name: "",
-    about: ""
+    fullname: "",
+    username: "",
+    story: "",
   };
   const [userData, setUserData] = useState(initialState);
-  const { name, about } = userData;
+  const { fullname, username, story} = userData;
 
   useEffect(() => {
     if (auth.token) history.push("/");
@@ -25,103 +25,82 @@ const RegisterAdmin = () => {
     setUserData({ ...userData, [name]: value });
   };
 
-  // const handleSubmit = (e) => {
-  //   e.preventDefault();
-  //   dispatch(createGroup({ userData, auth, socket }));
-  //   setUserData(initialState);
-  // };
-
   const handleSubmit = (e) => {
     e.preventDefault();
-
-
-    dispatch(createGroup({ name, about, auth, socket }));
-
-
+    userData.role = "group";
+    userData.email = "group-admin@widenout.com";
+    userData.password = "group-password";
+    userData.cf_password = "group-password";
+    // console.log(userData);
+    dispatch(registerGroup(userData));
+    setUserData(initialState);
   };
 
   return (
     <div className="auth_page">
-      <form onSubmit={handleSubmit}>
-        <div className="status_header">
-          <h5 className="m-0">Create Post</h5>
-
-        </div>
-        <div className="status_body">
-
-          <input
-            type="text"
-            className="form-control"
-            id="name"
-            onChange={handleChangeInput}
-            value={name}
-            name="name"
-            style={{ background: `${alert.name ? "#fd2d6a14" : ""} ` }}
-            placeholder={`${auth.user.username}, Group Name`}
-          />
-          <input
-            type="text"
-            className="form-control"
-            id="about"
-            onChange={handleChangeInput}
-            value={about}
-            name="about"
-            style={{ background: `${alert.about ? "#fd2d6a14" : ""} ` }}
-            placeholder={`${auth.user.username}, About Group`}
-          />
-
-
-        </div>
-        <div className="status_footer">
-          <button type="submit" className="btn btn-primary w-100">
-            Post
-          </button>
-        </div>
-      </form>
-      {/* <form onSubmit={handleSubmit} className="inner-shadow">
+      <form onSubmit={handleSubmit} className="inner-shadow">
         <h3 className="text-uppercase text-center mb-4 auth-heading">
           Create New Group
         </h3>
         <div className="mb-3">
-          <label htmlFor="name" className="form-label">
-            Name
+          <label htmlFor="fullname" className="form-label">
+            Group name
           </label>
           <div className="outer-shadow hover-in-shadow form-input-wrap">
             <input
               type="text"
               className="form-control"
-              id="name"
+              id="fullname"
               onChange={handleChangeInput}
-              value={name}
-              name="name"
-              style={{ background: `${alert.name ? "#fd2d6a14" : ""} ` }}
+              value={fullname}
+              name="fullname"
+              style={{ background: `${alert.fullname ? "#fd2d6a14" : ""} ` }}
             />
           </div>
           <small className="form-text text-danger">
-            {alert.name ? alert.name : ""}
+            {alert.fullname ? alert.fullname : ""}
           </small>
         </div>
 
         <div className="mb-3">
-          <label htmlFor="about" className="form-label">
-            About
+          <label htmlFor="story" className="form-label">
+            About group
           </label>
           <div className="outer-shadow hover-in-shadow form-input-wrap">
             <input
               type="text"
               className="form-control"
-              id="about"
+              id="story"
               onChange={handleChangeInput}
-              value={about}
-              name="about"
-              style={{ background: `${alert.about ? "#fd2d6a14" : ""} ` }}
+              value={story}
+              name="story"
+              style={{ background: `${alert.story ? "#fd2d6a14" : ""} ` }}
             />
           </div>
           <small className="form-text text-danger">
-            {alert.about ? alert.about : ""}
+            {alert.story ? alert.story : ""}
           </small>
         </div>
 
+        <div className="mb-3">
+          <label htmlFor="username" className="form-label">
+            Group slug name
+          </label>
+          <div className="outer-shadow hover-in-shadow form-input-wrap">
+            <input
+              type="text"
+              className="form-control"
+              id="username"
+              onChange={handleChangeInput}
+              value={username.toLowerCase().replace(/ /g, "")}
+              name="username"
+              style={{ background: `${alert.username ? "#fd2d6a14" : ""} ` }}
+            />
+          </div>
+          <small className="form-text text-danger">
+            {alert.username ? alert.username : ""}
+          </small>
+        </div>
 
         <button
           type="submit"
@@ -129,9 +108,9 @@ const RegisterAdmin = () => {
         >
           Create
         </button>
-      </form> */}
+      </form>
     </div>
   );
 };
 
-export default RegisterAdmin;
+export default RegisterGroup;

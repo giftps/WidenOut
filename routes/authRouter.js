@@ -5,6 +5,7 @@ const auth = require('../middleware/auth');
 
 router.post('/register', authCtrl.register);
 router.post("/register_admin", authCtrl.registerAdmin);
+router.post("/register_group", authCtrl.registerGroup);
 router.post("/changePassword", auth,  authCtrl.changePassword);
 
 

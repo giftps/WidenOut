@@ -15,15 +15,17 @@ export const POST_TYPES = {
   SAVE_POST: "SAVE_POST",
 };
 
-export const createPost = ({content, images, auth, socket}) => async dispatch => {
+export const createPost = ({content, group, images, auth, socket}) => async dispatch => {
     let media = [];
+
+    // console.log(group)
 
     try {
         dispatch({ type: GLOBALTYPES.ALERT, payload: {loading: true} });
 
         if(images.length > 0){ media = await imageUpload(images)}
 
-        const res = await postDataAPI('posts', {content, images: media}, auth.token );
+        const res = await postDataAPI('posts', {content, group, images: media}, auth.token );
 
         
         dispatch({ type: POST_TYPES.CREATE_POST , payload: {...res.data.newPost, user: auth.user} });
@@ -37,7 +39,8 @@ export const createPost = ({content, images, auth, socket}) => async dispatch =>
           text: "Added a new post.",
           recipients: res.data.newPost.user.followers,
           url: `/post/${res.data.newPost._id}`,
-          content, 
+          content,
+          group,
           image: media[0].url
         };
 

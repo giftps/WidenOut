@@ -1,17 +1,16 @@
 import React, { useState, useRef, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { GLOBALTYPES } from "../redux/actions/globalTypes";
-import { createPost, updatePost } from "../redux/actions/postAction";
-import Icons from "./Icons";
-import { imageShow, videoShow } from "../utils/mediaShow";
+import { GLOBALTYPES } from "../../redux/actions/globalTypes";
+import { createPost, updatePost } from "../../redux/actions/postAction";
+import Icons from "../Icons";
+import { imageShow, videoShow } from "../../utils/mediaShow";
 
-const StatusModal = () => {
+const StatusModal = ({user}) => {
   const { auth, theme, status, socket } = useSelector((state) => state);
   const dispatch = useDispatch();
 
-  // console.log(user);
-
   const [content, setContent] = useState("");
+  const [group, setGroup] = useState(user._id);
   const [images, setImages] = useState([]);
   const [stream, setStream] = useState(false);
   const videoRef = useRef();
@@ -87,13 +86,17 @@ const StatusModal = () => {
       });
     }
 
+    // const group = user._id
+    console.log(group);
+
     if (status.onEdit) {
-      dispatch(updatePost({ content, images, auth, status }));
+      dispatch(updatePost({ content, group, images, auth, status}));
     } else {
-      dispatch(createPost({ content, images, auth, socket }));
+      dispatch(createPost({ content, group, images, auth, socket}));
     }
 
     setContent("");
+    setGroup(user._id);
     setImages([]);
     if (tracks) {
       tracks.stop();
@@ -107,6 +110,7 @@ const StatusModal = () => {
   useEffect(() => {
     if (status.onEdit) {
       setContent(status.content);
+      setGroup(status.group);
       setImages(status.images);
     }
   }, [status]);
@@ -131,12 +135,19 @@ const StatusModal = () => {
             onChange={(e) => setContent(e.target.value)}
             value={content}
             name="content"
-            placeholder={`${auth.user.username}, What's on your mind?`}
+            placeholder={`Post to ${user.fullname}`}
             style={{
               filter: theme ? "invert(1)" : "invert(0)",
               color: theme ? "white" : "#111",
               background: theme ? "rgb(0,0,0,0.3)" : "",
             }}
+          />
+          <input
+            onChange={(e) => setGroup(`${user._id}`)}
+            value={user._id}
+            hidden="hidden"
+            name="group"
+            placeholder={`Post to ${user._id}`}
           />
 
           <div className="d-flex">

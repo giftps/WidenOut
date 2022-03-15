@@ -1,26 +1,20 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
-import { registerAdmin } from "../../../redux/actions/authAction";
+import { createGroup } from "../../../redux/actions/adminAction";
 
 const RegisterAdmin = () => {
-  const { auth, alert } = useSelector((state) => state);
+  const { auth, alert, socket } = useSelector((state) => state);
+
   const dispatch = useDispatch();
   const history = useHistory();
 
   const initialState = {
-    fullname: "",
-    username: "",
-    email: "",
-    password: "",
-    cf_password: "",
-    gender: "male"
+    name: "",
+    about: ""
   };
   const [userData, setUserData] = useState(initialState);
-  const { fullname, username, email, password, cf_password } = userData;
-
-  const [typePass, setTypePass] = useState(false);
-  const [typeCfPass, setTypeCfPass] = useState(false);
+  const { name, about } = userData;
 
   useEffect(() => {
     if (auth.token) history.push("/");
@@ -31,166 +25,114 @@ const RegisterAdmin = () => {
     setUserData({ ...userData, [name]: value });
   };
 
+  // const handleSubmit = (e) => {
+  //   e.preventDefault();
+  //   dispatch(createGroup({ userData, auth, socket }));
+  //   setUserData(initialState);
+  // };
+
   const handleSubmit = (e) => {
     e.preventDefault();
-    userData.role = "admin";
-    dispatch(registerAdmin(userData));
-    setUserData(initialState);
+
+
+    dispatch(createGroup({ name, about, auth, socket }));
+
+
   };
 
   return (
     <div className="auth_page">
-      <form onSubmit={handleSubmit} className="inner-shadow">
+      <form onSubmit={handleSubmit}>
+        <div className="status_header">
+          <h5 className="m-0">Create Post</h5>
+
+        </div>
+        <div className="status_body">
+
+          <input
+            type="text"
+            className="form-control"
+            id="name"
+            onChange={handleChangeInput}
+            value={name}
+            name="name"
+            style={{ background: `${alert.name ? "#fd2d6a14" : ""} ` }}
+            placeholder={`${auth.user.username}, Group Name`}
+          />
+          <input
+            type="text"
+            className="form-control"
+            id="about"
+            onChange={handleChangeInput}
+            value={about}
+            name="about"
+            style={{ background: `${alert.about ? "#fd2d6a14" : ""} ` }}
+            placeholder={`${auth.user.username}, About Group`}
+          />
+
+
+        </div>
+        <div className="status_footer">
+          <button type="submit" className="btn btn-primary w-100">
+            Post
+          </button>
+        </div>
+      </form>
+      {/* <form onSubmit={handleSubmit} className="inner-shadow">
         <h3 className="text-uppercase text-center mb-4 auth-heading">
-          Campus Connect
+          Create New Group
         </h3>
         <div className="mb-3">
-          <label htmlFor="fullname" className="form-label">
-            Full name
+          <label htmlFor="name" className="form-label">
+            Name
           </label>
           <div className="outer-shadow hover-in-shadow form-input-wrap">
             <input
               type="text"
               className="form-control"
-              id="fullname"
+              id="name"
               onChange={handleChangeInput}
-              value={fullname}
-              name="fullname"
-              style={{ background: `${alert.fullname ? "#fd2d6a14" : ""} ` }}
+              value={name}
+              name="name"
+              style={{ background: `${alert.name ? "#fd2d6a14" : ""} ` }}
             />
           </div>
           <small className="form-text text-danger">
-            {alert.fullname ? alert.fullname : ""}
+            {alert.name ? alert.name : ""}
           </small>
         </div>
 
         <div className="mb-3">
-          <label htmlFor="username" className="form-label">
-            User name
+          <label htmlFor="about" className="form-label">
+            About
           </label>
           <div className="outer-shadow hover-in-shadow form-input-wrap">
             <input
               type="text"
               className="form-control"
-              id="username"
+              id="about"
               onChange={handleChangeInput}
-              value={username.toLowerCase().replace(/ /g, "")}
-              name="username"
-              style={{ background: `${alert.username ? "#fd2d6a14" : ""} ` }}
+              value={about}
+              name="about"
+              style={{ background: `${alert.about ? "#fd2d6a14" : ""} ` }}
             />
           </div>
           <small className="form-text text-danger">
-            {alert.username ? alert.username : ""}
+            {alert.about ? alert.about : ""}
           </small>
         </div>
 
-        <div className="mb-3">
-          <label htmlFor="email" className="form-label">
-            Email address
-          </label>
-          <div className="outer-shadow hover-in-shadow form-input-wrap">
-            <input
-              type="email"
-              className="form-control"
-              id="email"
-              aria-describedby="emailHelp"
-              onChange={handleChangeInput}
-              value={email}
-              name="email"
-              style={{ background: `${alert.email ? "#fd2d6a14" : ""} ` }}
-            />
-          </div>
-          <small className="form-text text-danger">
-            {alert.email ? alert.email : ""}
-          </small>
-        </div>
-
-        <div className="mb-3">
-          <label htmlFor="password" className="form-label">
-            Password
-          </label>
-          <div className="pass">
-            <div className="outer-shadow hover-in-shadow form-input-wrap">
-              <input
-                type={typePass ? "text" : "password"}
-                className="form-control"
-                id="password"
-                onChange={handleChangeInput}
-                value={password}
-                name="password"
-                style={{ background: `${alert.password ? "#fd2d6a14" : ""} ` }}
-              />
-              <small onClick={() => setTypePass(!typePass)}>
-                {typePass ? "Hide" : "Show"}
-              </small>
-            </div>
-          </div>
-          <small className="form-text text-danger">
-            {alert.password ? alert.password : ""}
-          </small>
-        </div>
-
-        <div className="mb-3">
-          <label htmlFor="cf_password" className="form-label">
-            Confirm Password
-          </label>
-          <div className="pass">
-            <div className="outer-shadow hover-in-shadow form-input-wrap">
-              <input
-                type={typeCfPass ? "text" : "password"}
-                className="form-control"
-                id="cf_password"
-                onChange={handleChangeInput}
-                value={cf_password}
-                name="cf_password"
-                style={{
-                  background: `${alert.cf_password ? "#fd2d6a14" : ""} `,
-                }}
-              />
-              <small onClick={() => setTypeCfPass(!typeCfPass)}>
-                {typeCfPass ? "Hide" : "Show"}
-              </small>
-            </div>
-          </div>
-          <small className="form-text text-danger">
-            {alert.cf_password ? alert.cf_password : ""}
-          </small>
-        </div>
-
-        <div className="d-flex justify-content-evenly  mx-0 mb-1">
-          <label htmlFor="male">
-            Male:
-            <input
-              type="radio"
-              id="male"
-              name="gender"
-              value="male"
-              defaultChecked
-              onChange={handleChangeInput}
-            />
-          </label>
-
-          <label htmlFor="female">
-            Female:
-            <input
-              type="radio"
-              id="female"
-              name="gender"
-              value="female"
-              onChange={handleChangeInput}
-            />
-          </label>
-        </div>
 
         <button
           type="submit"
           className="btn-1 w-100 d-flex outer-shadow hover-in-shadow justify-content-center"
         >
-          Register
+          Create
         </button>
-      </form>
+      </form> */}
     </div>
   );
 };
 
 export default RegisterAdmin;
+

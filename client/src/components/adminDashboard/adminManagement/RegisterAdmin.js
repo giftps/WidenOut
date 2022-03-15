@@ -34,6 +34,7 @@ const RegisterAdmin = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     userData.role = "admin";
+    
     dispatch(registerAdmin(userData));
     setUserData(initialState);
   };
@@ -42,7 +43,7 @@ const RegisterAdmin = () => {
     <div className="auth_page">
       <form onSubmit={handleSubmit} className="inner-shadow">
         <h3 className="text-uppercase text-center mb-4 auth-heading">
-          Campus Connect
+          Create New Admin
         </h3>
         <div className="mb-3">
           <label htmlFor="fullname" className="form-label">

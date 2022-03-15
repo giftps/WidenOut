@@ -137,6 +137,37 @@ const authCtrl = {
     }
   },
 
+  registerGroup: async (req, res) => {
+    try {
+      const { fullname, username, story, role, email, password} = req.body;
+
+      let newUserName = username.toLowerCase().replace(/ /g, "");
+
+      const user_name = await Users.findOne({ username: newUserName });
+      if (user_name) {
+        return res.status(400).json({ msg: "This group slug name is already taken." });
+      }
+
+      const newUser = new Users({
+        fullname,
+        username: newUserName,
+        story,
+        role,
+        email,
+        password,
+      });
+
+
+
+
+      await newUser.save();
+
+      res.json({ msg: "Group Created Successfully." });
+    } catch (err) {
+      return res.status(500).json({ msg: err.message });
+    }
+  },
+
   login: async (req, res) => {
     try {
       const { email, password } = req.body;
