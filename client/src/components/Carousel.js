@@ -37,6 +37,8 @@ const Carousel = ({ images, id }) => {
                 src={img.url}
                 className="d-block w-100"
                 alt={img.url}
+                height="400px"
+                width="200"
               />
             )}
           </div>

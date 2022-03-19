@@ -31,7 +31,7 @@ const Home = () => {
             <div className="col-md-8">
                 <AllGroups />
 
-                {console.log(ghomePosts)}
+                {/* {console.log(ghomePosts)} */}
 
                 {
                     ghomePosts.loading 

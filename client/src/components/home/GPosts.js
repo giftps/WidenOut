@@ -6,7 +6,7 @@ import LoadMoreBtn from "../LoadMoreBtn";
 import { getDataAPI } from "../../utils/fetchData";
 import { POST_G_TYPES } from "../../redux/actions/groupPostAction";
 
-const GPostCtrl = () => {
+const GPosts = () => {
   const { ghomePosts, auth, theme } = useSelector((state) => state);
   const dispatch =  useDispatch();
 
@@ -18,9 +18,11 @@ const GPostCtrl = () => {
     dispatch({ type: POST_G_TYPES.GET_G_POSTS, payload: {...res.data, page: ghomePosts.page + 1 } });
     setLoad(false);
   };
+  console.log(ghomePosts)
   return (
     <div className="posts">
       {ghomePosts.posts.map((post) => (
+        // console.log(post)//<PostCard key={post._id} post={post} theme={theme} />
         <PostCard key={post._id} post={post} theme={theme} />
       ))}
 
@@ -38,4 +40,4 @@ const GPostCtrl = () => {
   );
 };
 
-export default GPostCtrl;
+export default GPosts;

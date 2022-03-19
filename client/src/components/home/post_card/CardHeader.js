@@ -8,7 +8,7 @@ import { BASE_URL } from '../../../utils/config'
 import { GLOBALTYPES } from "../../../redux/actions/globalTypes";
 import { deletePost, reportPost } from "../../../redux/actions/postAction";
 
-const CardHeader = ({ post }) => {
+const CardHeader = ({ post, user }) => {
   const { auth, socket } = useSelector((state) => state);
   const dispatch = useDispatch();
   const history = useHistory();
@@ -33,6 +33,9 @@ const CardHeader = ({ post }) => {
   const handleCopyLink = () => {
     navigator.clipboard.writeText(`${BASE_URL}/post/${post._id}`)
   };
+
+  // console.log(user.user)
+  console.log(post)
 
   return (
     <div className="card_header">
