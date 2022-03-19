@@ -10,6 +10,7 @@ import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import PropTypes from "prop-types";
+import FormHelperText from '@mui/material/FormHelperText';
 import { styled } from "@mui/material/styles";
 import Check from "@mui/icons-material/Check";
 import SettingsIcon from "@mui/icons-material/Settings";
@@ -26,6 +27,13 @@ import FormControl from "@mui/material/FormControl";
 import FormLabel from "@mui/material/FormLabel";
 import SwipeableViews from "react-swipeable-views";
 
+import CssBaseline from '@mui/material/CssBaseline';
+import TextField from '@mui/material/TextField';
+import Checkbox from '@mui/material/Checkbox';
+import Grid from '@mui/material/Grid';
+
+import { createTheme, ThemeProvider } from '@mui/material/styles';
+
 // ** Import Global types
 import { GLOBALTYPES } from "../redux/actions/globalTypes";
 
@@ -33,6 +41,18 @@ import "@fontsource/roboto/300.css";
 import "@fontsource/roboto/400.css";
 import "@fontsource/roboto/500.css";
 import "@fontsource/roboto/700.css";
+
+function Copyright(props) {
+  return (
+    <Typography variant="body2" color="text.secondary" align="center" {...props}>
+      {'Copyright © '}
+      WidenOut{' '}
+      {new Date().getFullYear()}
+      {'.'}
+    </Typography>
+  );
+}
+const theme = createTheme();
 
 const QontoConnector = styled(StepConnector)(({ theme }) => ({
   [`&.${stepConnectorClasses.alternativeLabel}`]: {
@@ -198,6 +218,16 @@ const Register = () => {
 
   const [questionIndex, setQuestionIndex] = React.useState(0);
   const [isDone, setIsDone] = React.useState(false);
+  const [errors, setErrors] = React.useState({
+    password: '',
+    cf_password: '',
+    firstName: '',
+    lastName: '',
+    username: '',
+    email: '',
+    gender: '',
+    tc: ''
+  });
 
   const steps = ["Welcome", "Quiz", "Personal info"];
 
@@ -207,10 +237,11 @@ const Register = () => {
   const initialState = {
     fullname: "",
     username: "",
-    email: "", 
+    email: "",
     password: "",
     cf_password: "",
-    gender: "male",
+    gender: "",
+    tc: "",
   };
   const [userData, setUserData] = React.useState(initialState);
   const { fullname, username, email, password, cf_password } = userData;
@@ -240,18 +271,18 @@ const Register = () => {
   };
 
   const handleQuestionSubmit = () => {
-    if(Question1!=='B'){
+    if (Question1 !== 'B') {
       dispatch({ type: GLOBALTYPES.ALERT, payload: { error: "Question 1 is wrong try again" } });
-    }else if(Question2 !=='B'){
+    } else if (Question2 !== 'B') {
       dispatch({ type: GLOBALTYPES.ALERT, payload: { error: "Question 2 is wrong try again" } });
 
-    }else if(Question3 !=='C'){
+    } else if (Question3 !== 'C') {
       dispatch({ type: GLOBALTYPES.ALERT, payload: { error: "Question 3 is wrong try again" } });
-      
-    }else if(Question4 !=='D'){
+
+    } else if (Question4 !== 'D') {
       dispatch({ type: GLOBALTYPES.ALERT, payload: { error: "Question 4 is wrong try again" } });
 
-    }else{
+    } else {
       setIsDone(true)
       dispatch({ type: GLOBALTYPES.ALERT, payload: { succuss: "Great! all questions are collect" } });
 
@@ -260,14 +291,11 @@ const Register = () => {
         newSkipped = new Set(newSkipped.values());
         newSkipped.delete(activeStep);
       }
-  
+
       setActiveStep((prevActiveStep) => prevActiveStep + 1);
       setSkipped(newSkipped);
     }
-    console.log(Question1);
-    console.log(Question2);
-    console.log(Question3);
-    console.log(Question4);
+
   };
 
   React.useEffect(() => {
@@ -282,7 +310,7 @@ const Register = () => {
     setQuestionIndex(index);
   };
 
-  const [activeStep, setActiveStep] = React.useState(0);
+  const [activeStep, setActiveStep] = React.useState(2);
   const [skipped, setSkipped] = React.useState(new Set());
 
   const isStepOptional = (step) => {
@@ -294,16 +322,16 @@ const Register = () => {
   };
 
   const handleNext = () => {
-    if(activeStep === 0 && !isDone){
+    if (activeStep === 0 && !isDone) {
       let newSkipped = skipped;
       if (isStepSkipped(activeStep)) {
         newSkipped = new Set(newSkipped.values());
         newSkipped.delete(activeStep);
       }
-  
+
       setActiveStep((prevActiveStep) => prevActiveStep + 1);
       setSkipped(newSkipped);
-    }else{
+    } else {
       dispatch({ type: GLOBALTYPES.ALERT, payload: { error: "Please make sure you answer all the question" } });
     }
   };
@@ -336,9 +364,66 @@ const Register = () => {
     setUserData({ ...userData, [name]: value });
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    dispatch(register(userData));
+  // const handleSubmit = (e) => {
+  //   e.preventDefault();
+  //   dispatch(register(userData));
+  // };
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    const data = new FormData(event.currentTarget);
+    // console.log(data.get('gender'));
+    setErrors({
+      ...errors,
+      password: '',
+      cf_password: '',
+      firstName: '',
+      lastName: '',
+      username: '',
+      email: '',
+      gender: '',
+      tc: ''
+    })
+
+    // console.log(data.get('tc'))
+
+    if (!data.get('firstName')) {
+      setErrors({ ...errors, firstName: 'This field cannot be empty.' })
+    }
+    else if (!data.get('lastName')) {
+      setErrors({ ...errors, lastName: 'This field cannot be empty.' })
+    }
+    else if (!data.get('username')) {
+      setErrors({ ...errors, username: 'This field cannot be empty.' })
+    }
+    else if (!data.get('email')) {
+      setErrors({ ...errors, email: 'This field cannot be empty.' })
+    }
+    else if (!data.get('password')) {
+      setErrors({ ...errors, password: 'This field cannot be empty.' })
+    }
+    else if (data.get('password').length < 6) {
+      setErrors({ ...errors, password: 'The password provided is not long enough.' })
+    }
+    else if (data.get('password') !== data.get('cf_password')) {
+      setErrors({ ...errors, cf_password: 'Password and Confirm password does not match.' })
+    }
+    else if (!data.get('gender')) {
+      setErrors({ ...errors, gender: 'Please select gender.' })
+    }
+    else if (!data.get('tc')) {
+      setErrors({ ...errors, tc: 'Agree to  terms and conditions.' })
+    } else {
+      dispatch(register({
+        fullname: data.get('firstName') +" "+ data.get('lastName'),
+        username: data.get('username'),
+        email: data.get('email'),
+        password: data.get('password'),
+        cf_password: data.get('cf_password'),
+        gender: data.get('gender'),
+      }))
+    }
+
   };
 
   return (
@@ -648,175 +733,144 @@ const Register = () => {
                   </Box>
                 </div>
               ) : (
-                <div className="auth_page">
-                  <form onSubmit={handleSubmit} className="inner-shadow">
-                    <h3 className="text-uppercase text-center mb-4 auth-heading">
-                      <img src={wno_logo} alt="logo" width="200" />
-                    </h3>
-                    <div className="mb-3">
-                      <label htmlFor="fullname" className="form-label">
-                        Full name
-                      </label>
-                      <div className="outer-shadow hover-in-shadow form-input-wrap">
-                        <input
-                          type="text"
-                          className="form-control"
-                          id="fullname"
-                          onChange={handleChangeInput}
-                          value={fullname}
-                          name="fullname"
-                          style={{
-                            background: `${alert.fullname ? "#fd2d6a14" : ""} `,
-                          }}
-                        />
-                      </div>
-                      <small className="form-text text-danger">
-                        {alert.fullname ? alert.fullname : ""}
-                      </small>
-                    </div>
-
-                    <div className="mb-3">
-                      <label htmlFor="username" className="form-label">
-                        User name
-                      </label>
-                      <div className="outer-shadow hover-in-shadow form-input-wrap">
-                        <input
-                          type="text"
-                          className="form-control"
-                          id="username"
-                          onChange={handleChangeInput}
-                          value={username.toLowerCase().replace(/ /g, "")}
-                          name="username"
-                          style={{
-                            background: `${alert.username ? "#fd2d6a14" : ""} `,
-                          }}
-                        />
-                      </div>
-                      <small className="form-text text-danger">
-                        {alert.username ? alert.username : ""}
-                      </small>
-                    </div>
-
-                    <div className="mb-3">
-                      <label htmlFor="email" className="form-label">
-                        Email address
-                      </label>
-                      <div className="outer-shadow hover-in-shadow form-input-wrap">
-                        <input
-                          type="email"
-                          className="form-control"
-                          id="email"
-                          aria-describedby="emailHelp"
-                          onChange={handleChangeInput}
-                          value={email}
-                          name="email"
-                          style={{
-                            background: `${alert.email ? "#fd2d6a14" : ""} `,
-                          }}
-                        />
-                      </div>
-                      <small className="form-text text-danger">
-                        {alert.email ? alert.email : ""}
-                      </small>
-                    </div>
-
-                    <div className="mb-3">
-                      <label htmlFor="password" className="form-label">
-                        Password
-                      </label>
-                      <div className="pass">
-                        <div className="outer-shadow hover-in-shadow form-input-wrap">
-                          <input
-                            type={typePass ? "text" : "password"}
-                            className="form-control"
-                            id="password"
-                            onChange={handleChangeInput}
-                            value={password}
-                            name="password"
-                            style={{
-                              background: `${
-                                alert.password ? "#fd2d6a14" : ""
-                              } `,
-                            }}
-                          />
-                          <small onClick={() => setTypePass(!typePass)}>
-                            {typePass ? "Hide" : "Show"}
-                          </small>
-                        </div>
-                      </div>
-                      <small className="form-text text-danger">
-                        {alert.password ? alert.password : ""}
-                      </small>
-                    </div>
-
-                    <div className="mb-3">
-                      <label htmlFor="cf_password" className="form-label">
-                        Confirm Password
-                      </label>
-                      <div className="pass">
-                        <div className="outer-shadow hover-in-shadow form-input-wrap">
-                          <input
-                            type={typeCfPass ? "text" : "password"}
-                            className="form-control"
-                            id="cf_password"
-                            onChange={handleChangeInput}
-                            value={cf_password}
-                            name="cf_password"
-                            style={{
-                              background: `${
-                                alert.cf_password ? "#fd2d6a14" : ""
-                              } `,
-                            }}
-                          />
-                          <small onClick={() => setTypeCfPass(!typeCfPass)}>
-                            {typeCfPass ? "Hide" : "Show"}
-                          </small>
-                        </div>
-                      </div>
-                      <small className="form-text text-danger">
-                        {alert.cf_password ? alert.cf_password : ""}
-                      </small>
-                    </div>
-
-                    <div className="d-flex justify-content-evenly  mx-0 mb-1">
-                      <label htmlFor="male">
-                        Male:
-                        <input
-                          type="radio"
-                          id="male"
-                          name="gender"
-                          value="male"
-                          defaultChecked
-                          onChange={handleChangeInput}
-                        />
-                      </label>
-
-                      <label htmlFor="female">
-                        Female:
-                        <input
-                          type="radio"
-                          id="female"
-                          name="gender"
-                          value="female"
-                          onChange={handleChangeInput}
-                        />
-                      </label>
-                    </div>
-
-                    <button
-                      type="submit"
-                      className="btn-1 w-100 d-flex outer-shadow hover-in-shadow justify-content-center"
+                <ThemeProvider theme={theme}>
+                  <Container component="main" maxWidth="xs">
+                    <CssBaseline />
+                    <Box
+                      sx={{
+                        marginTop: 1,
+                        display: 'flex',
+                        flexDirection: 'column',
+                        alignItems: 'center',
+                      }}
                     >
-                      Register
-                    </button>
-                    <p className="my-2">
-                      Already have an account?{" "}
-                      <Link to="/" style={{ color: "crimson" }}>
-                        Login Now.
-                      </Link>
-                    </p>
-                  </form>
-                </div>
+                      <div style={{ width: 100, height: 100 }}>
+                        <img style={{ width: '100%' }} src={'./WidenOut-logo.png'} alt='logo' />
+                      </div>
+                      <Typography component="h1" variant="h5">
+                        WidenOut
+                      </Typography>
+                      <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
+                        <Grid container spacing={2}>
+                          <Grid item xs={12} sm={6}>
+                            <TextField
+                              error={errors.firstName !== '' ? true : false}
+                              helperText={errors.firstName}
+                              autoComplete="given-name"
+                              name="firstName"
+                              required
+                              fullWidth
+                              id="firstName"
+                              label="First Name"
+                              autoFocus
+                            />
+                          </Grid>
+                          <Grid item xs={12} sm={6}>
+                            <TextField
+                              required
+                              fullWidth
+                              id="lastName"
+                              label="Last Name"
+                              name="lastName"
+                              autoComplete="family-name"
+                            />
+                          </Grid>
+                          <Grid item xs={12}>
+                            <TextField
+                              error={errors.username !== '' ? true : false}
+                              helperText={errors.username}
+                              required
+                              fullWidth
+                              id="username"
+                              label="Username"
+                              name="username"
+                              autoComplete="username"
+                            />
+                          </Grid>
+                          <Grid item xs={12}>
+                            <TextField
+                              error={errors.email !== '' ? true : false}
+                              helperText={errors.email}
+                              required
+                              fullWidth
+                              id="email"
+                              label="Email Address"
+                              name="email"
+                              autoComplete="email"
+                            />
+                          </Grid>
+                          <Grid item xs={12} sm={6}>
+                            <TextField
+                              required
+                              error={errors.password !== '' ? true : false}
+                              fullWidth
+                              name="password"
+                              label="Password"
+                              type="password"
+                              id="password"
+                              autoComplete="new-password"
+                              helperText={errors.password}
+                            />
+                          </Grid>
+                          <Grid item xs={12} sm={6}>
+                            <TextField
+                              required
+                              error={errors.cf_password !== '' ? true : false}
+                              fullWidth
+                              name="cf_password"
+                              label="Confirm Password"
+                              type="password"
+                              id="cf_password"
+                              autoComplete="cf_password"
+                              helperText={errors.cf_password}
+                            />
+                          </Grid>
+                          <Grid item xs={12}>
+                            <FormControl sx={{ m: 3 }} error={errors.gender !== '' ? true : false} variant="standard">
+                              <FormLabel id="demo-row-radio-buttons-group-label">Gender</FormLabel>
+                              <RadioGroup
+                                row
+                                aria-labelledby="demo-row-radio-buttons-group-label"
+                                name="gender"
+                              >
+                                <FormControlLabel value="female" control={<Radio />} label="Female" />
+                                <FormControlLabel value="male" control={<Radio />} label="Male" />
+                              </RadioGroup>
+                              <FormHelperText>{errors.gender}</FormHelperText>
+                            </FormControl>
+                          </Grid>
+                          <Grid item xs={12}>
+                            <FormControl sx={{ m: 3 }} error={errors.tc !== '' ? true : false} variant="standard">
+                              <FormControlLabel
+                                name='tc'
+                                error={errors.tc !== '' ? true : false}
+                                control={<Checkbox value="i_agree" color="primary" />}
+                                label="I agree to terms and conditions."
+                              />
+                            </FormControl>
+                            <FormHelperText>{errors.tc}</FormHelperText>
+                          </Grid>
+                        </Grid>
+                        <Button
+                          type="submit"
+                          fullWidth
+                          variant="contained"
+                          sx={{ mt: 3, mb: 2 }}
+                        >
+                          Sign Up
+                        </Button>
+                        <Grid container justifyContent="flex-end">
+                          <Grid item>
+                            <Link to="/" variant="body2">
+                              Already have an account? Sign in
+                            </Link>
+                          </Grid>
+                        </Grid>
+                      </Box>
+                    </Box>
+                    <Copyright sx={{ mt: 5 }} />
+                  </Container>
+                </ThemeProvider>
               )}
 
               <Box sx={{ display: "flex", flexDirection: "row", pt: 2 }}>
