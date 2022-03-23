@@ -18,7 +18,7 @@ const GPosts = () => {
     dispatch({ type: POST_G_TYPES.GET_G_POSTS, payload: {...res.data, page: ghomePosts.page + 1 } });
     setLoad(false);
   };
-  console.log(ghomePosts)
+  // console.log(ghomePosts)
   return (
     <div className="posts">
       {ghomePosts.posts.map((post) => (

@@ -106,14 +106,20 @@ const userCtrl = {
       const newUser = await Users.findOneAndUpdate(
         { _id: req.params.id },
         {
-          $pull: { followers: req.user._id }
+          $pull: {
+            followers: req.user._id,
+            members: req.user._id
+          }
         },
         { new: true }
       ).populate('followers following', '-password');
 
       await Users.findOneAndUpdate(
         { _id: req.user._id },
-        { $pull: { following: req.params.id } },
+        { $pull: {
+          following: req.params.id,
+          groups: req.params.id 
+        } },
         { new: true }
       );
 

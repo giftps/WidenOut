@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import PostCard from "../PostCard";
+import UserPostCard from "../UserPostCard";
 import LoadIcon from "../../images/loading.gif";
 import LoadMoreBtn from "../LoadMoreBtn";
 import { getDataAPI } from "../../utils/fetchData";
@@ -39,7 +39,7 @@ const GPostsSingle = ({ auth, profile, dispatch, id }) => {
     <div className="posts">
       {posts && posts.map((post) => (
         // console.log(post)//<PostCard key={post._id} post={post} theme={theme} />
-        <PostCard key={post._id} post={post} user={profile.users} theme={theme} />
+        <UserPostCard key={post._id} post={post} user={profile.users} theme={theme} />
       ))}
 
       {load && (

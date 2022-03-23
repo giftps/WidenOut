@@ -92,7 +92,7 @@ const NotifyModal = () => {
           style={{ cursor: "pointer" }}
           onClick={handleDeleteAll}
         >
-          Delete
+          Mark All As Read
         </div>
       </div>
     );

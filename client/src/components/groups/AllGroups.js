@@ -13,8 +13,6 @@ const AllGroups = () => {
     return (
         <div class="all_groups">
 
-            {console.log(groups.groups)}
-
             {
                 groups.loading
                     ? <img src={LoadIcon} alt="loading" className="d-block mx-auto my-4" />
@@ -22,7 +20,7 @@ const AllGroups = () => {
                         {
                             groups.groups.map(group => (
                                 <Link
-                                    to={`/group/${group._id}`}
+                                    to={`/profile/${group._id}`}
                                     // onClick={handleCloseAll}
                                     style={{ textDecoration: "none" }}
                                 >

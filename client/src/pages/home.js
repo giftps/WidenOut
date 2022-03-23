@@ -11,7 +11,7 @@ import LoadIcon from '../images/loading.gif'
 const Home = () => {
   const { homePosts } = useSelector(state => state);
     return (
-      <div className="home row mx-0">
+      <div className="container home row mx-0">
         <div className="col-md-8">
           <Status />
           {homePosts.loading ? (

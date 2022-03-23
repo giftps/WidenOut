@@ -1,11 +1,11 @@
-const Groups = require("../models/groupModel");
+const Users = require("../models/userModel");
 
 const groupCtrl = {
 
   allGroups: async (req, res) => {
     try {
 
-      const groups = await Groups.find();
+      const groups = await Users.find({role: "group"});
 
       if (!groups) {
         return res.status(400).json({ msg: "Not getting groups ??" });
