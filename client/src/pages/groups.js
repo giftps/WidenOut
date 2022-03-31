@@ -27,8 +27,11 @@ const Home = () => {
     },[])
 
     return (
-        <div className="home row mx-0 my-4">
-            <div className="col-md-8">
+        <div className="container home row mx-0 my-4">
+            <div className="col-md-2">
+                
+            </div>
+            <div className="col-md-6">
                 <AllGroups />
 
                 {/* {console.log(ghomePosts)} */}
