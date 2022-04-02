@@ -37,6 +37,7 @@ const GPostsSingle = ({ auth, profile, dispatch, id }) => {
   // console.log(profile.users)
   return (
     <div className="posts">
+    <div className="container">
       {posts && posts.map((post) => (
         // console.log(post)//<PostCard key={post._id} post={post} theme={theme} />
         <UserPostCard key={post._id} post={post} user={profile.users} theme={theme} />
@@ -52,6 +53,7 @@ const GPostsSingle = ({ auth, profile, dispatch, id }) => {
         load={load}
         handleLoadMore={handleLoadMore}
       />
+    </div>
     </div>
   );
 };

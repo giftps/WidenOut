@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from 'react';
+import { Link, useHistory } from "react-router-dom";
+import { useDispatch, useSelector } from 'react-redux';
 import Avatar from '../Avatar';
 import EditProfile from './EditProfile';
 import FollowBtn from '../FollowBtn';
@@ -8,13 +10,38 @@ import Followers from './Followers';
 import ChangePassword from './ChangePassword';
 import { GLOBALTYPES } from '../../redux/actions/globalTypes';
 
+import { addUser, getConversations } from "../../redux/actions/messageAction";
+
+
 const Info = ({ id, auth, profile, dispatch }) => {
+  const { message } = useSelector((state) => state);
+
   const [userData, setUserData] = useState([]);
   const [onEdit, setOnEdit] = useState(false);
   const [changePassword, setChangePassword] = useState(false);
 
   const [showFollowers, setShowFollowers] = useState(false);
   const [showFollowing, setShowFollowing] = useState(false);
+
+  const history = useHistory();
+
+  const handleAddUser = (user) => {
+    // setSearch('');
+    // setSearchUsers([]);
+    dispatch(addUser({user, message}));
+    return history.push(`/message/${user._id}`);
+};
+useEffect(() => {
+  if (message.firstLoad) return;
+  dispatch(getConversations({ auth }));
+}, [dispatch, auth, message.firstLoad]);
+
+let page = 10;
+useEffect(() => {
+  if (message.resultUsers >= (page - 1) * 9 && page > 1) {
+    dispatch(getConversations({ auth, page }));
+  }
+}, [message.resultUsers, page, auth, dispatch]);
 
   useEffect(() => {
     if (id === auth.user._id) {
@@ -142,7 +169,9 @@ const Info = ({ id, auth, profile, dispatch }) => {
                           change password
                         </button>
                       ) : (
-                        " "
+                        <button className="btn-1 hover-in-shadow outer-shadow" onClick={() => handleAddUser(user)}>
+                          <span className={`material-icons `}>email</span>
+                        </button>
                       )}
                     </div>
 

@@ -98,7 +98,21 @@ const Profile = () => {
                   {
                     saveTab
                       ? <Saved auth={auth} dispatch={dispatch} />
-                      : <GPostsSingle auth={auth} profile={profile} dispatch={dispatch} id={id} />
+                      : 
+                      <>
+                        <div className="container home row mx-0">
+                          <div className="col-md-3">
+
+                          </div>
+                          <div className="col-md-7">
+                            <GPostsSingle auth={auth} profile={profile} dispatch={dispatch} id={id} />
+                          </div>
+                          <div className="col-md-3">
+
+                          </div>
+                      </div>
+                     </>
+                    //  Insta kind of display here 👇🏿👇🏿
                     // : <Posts auth={auth} profile={profile} dispatch={dispatch} id={id} />
                   }
                 </>

@@ -28,7 +28,19 @@ const Post = () => {
 
             {
                 post.map(item => (
-                    <PostCard post={item} key={item._id} />
+                <>
+                    <div className="container home row mx-0">
+                        {/* <div className="col-md-1">
+
+                        </div> */}
+                        <div className="col-md-12">
+                            <PostCard post={item} key={item._id} />
+                        </div>
+                        {/* <div className="col-md-1">
+
+                        </div> */}
+                      </div>
+                     </>
                 ))
             }
         </div>
