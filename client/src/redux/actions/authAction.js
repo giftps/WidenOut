@@ -5,7 +5,7 @@ import valid from "../../utils/valid";
 export const TYPES = {
   AUTH: "AUTH",
 };
-
+ 
 export const login = (data) => async (dispatch) => {
   try {
     dispatch({ type: GLOBALTYPES.ALERT, payload: { loading: true } });
@@ -129,10 +129,12 @@ export const refreshToken = () => async (dispatch) => {
 
 export const register = (data) => async (dispatch) => {
   const check = valid(data);
+  console.log(data)
+  
   if (check.errLength > 0) {
     return dispatch({ type: GLOBALTYPES.ALERT, payload: check.errMsg });
   }
-
+  
   try {
     dispatch({ type: GLOBALTYPES.ALERT, payload: { loading: true } });
 

@@ -13,7 +13,7 @@ import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Divider from '@mui/material/Divider';
 import SocialFacebook from '../components/socialButtons/facebook'
-// import SocialGoogle from '../components/socialButtons/google'
+import SocialGoogle from '../components/socialButtons/google'
 import { adminLogin, login } from "../redux/actions/authAction";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useHistory } from "react-router-dom";
@@ -58,11 +58,13 @@ export default function Login() {
       dispatch(login({
         email: data.get('email'),
         password: data.get('password'),
+        isSocialLogin: false
       }));
     } else {
       dispatch(adminLogin({
         email: data.get('email'),
         password: data.get('password'),
+        isSocialLogin: false
       }));
     }
 
@@ -130,7 +132,7 @@ export default function Login() {
                 <SocialFacebook />
               </Grid>
               <Grid item xs>
-                {/* <SocialGoogle /> */}
+                <SocialGoogle />
               </Grid>
             </Grid>
             <Grid container>

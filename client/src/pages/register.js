@@ -372,7 +372,7 @@ const Register = () => {
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    // console.log(data.get('gender'));
+    console.log(data.get('gender'));
     setErrors({
       ...errors,
       password: '',
