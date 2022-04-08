@@ -57,9 +57,9 @@ const authCtrl = {
 
       await newUser.save();
 
-      // res.json({ msg: "registered" });
+      // res.json({ msg: "registered" });   
     } catch (err) {
-      console.log(err)
+      // console.log(err)
       return res.status(500).json({ msg: err });
     } 
   },
