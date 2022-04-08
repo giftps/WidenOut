@@ -61,7 +61,7 @@ const Search = () => {
 
       <InputBase
         sx={{ ml: 1, flex: 1 }}
-        placeholder="Search..."
+        placeholder="Search..."   
         inputProps={{ 'aria-label': 'search...' }}
       />
       <IconButton type="submit" sx={{ p: '10px' }} aria-label="search">
