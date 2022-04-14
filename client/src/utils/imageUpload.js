@@ -3,9 +3,9 @@ export const checkImage = (file) => {
     if(!file){
         return err = "File does not exist.";
     }
-//?1 mb
-    if(file.size > 1024 * 1024){
-         return (err = "File size must be less than 1 Mb.");
+    //?5 mb
+    if(file.size > 5024 * 1024){
+         return (err = "File size must be 5 Mb or less.");
     }
 
     if (file.type !== 'image/jpeg' && file.type !== 'image/png') {

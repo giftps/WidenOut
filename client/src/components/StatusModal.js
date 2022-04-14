@@ -80,12 +80,7 @@ const StatusModal = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (images.length === 0) {
-      return dispatch({
-        type: GLOBALTYPES.ALERT,
-        payload: { error: "Add image(s)." },
-      });
-    }
+
 
     if (status.onEdit) {
       dispatch(updatePost({ content, images, auth, status }));
@@ -130,6 +125,7 @@ const StatusModal = () => {
           <textarea
             onChange={(e) => setContent(e.target.value)}
             value={content}
+            id="input"
             name="content"
             placeholder={`${auth.user.username}, widen out`}
             style={{

@@ -79,12 +79,7 @@ const StatusModal = ({user}) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (images.length === 0) {
-      return dispatch({
-        type: GLOBALTYPES.ALERT,
-        payload: { error: "Add image(s)." },
-      });
-    }
+
 
     // const group = user._id
     console.log(group);

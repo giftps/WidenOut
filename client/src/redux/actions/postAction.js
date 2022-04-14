@@ -39,7 +39,7 @@ export const createPost = ({content, group, images, auth, socket}) => async disp
           url: `/post/${res.data.newPost._id}`,
           content,
           group,
-          image: media[0].url
+          // image: media[0].url
         };
 
         dispatch(createNotify({msg, auth, socket}));
@@ -120,7 +120,7 @@ export const likePost = ({ post, auth, socket }) => async (dispatch) => {
       recipients: [post.user._id],
       url: `/post/${post._id}`,
       content: post.content,
-      image: post.images[0].url,
+      // image: post.images[0].url,
     };
 
     dispatch(createNotify({ msg, auth, socket }));
