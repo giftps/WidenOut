@@ -41,7 +41,7 @@ const Menu = () => {
             aria-expanded="false"
           >
             <span
-              style={{ color: notify.data.length > 0 ? "var(--c1)" : "" }}
+              style={{ color: notify.data.length > 0 ? "#d42d2dcc" : "#0d6efd" }}
               className={`material-icons `}
             >
               notifications

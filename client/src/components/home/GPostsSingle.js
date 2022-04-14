@@ -34,7 +34,8 @@ const GPostsSingle = ({ auth, profile, dispatch, id }) => {
     dispatch({ type: PROFILE_TYPES.UPDATE_POST, payload: newData });
     setLoad(false);
   };
-  // console.log(profile.users)
+  console.log(profile.users[0])
+  console.log(profile)
   return (
     <div className="posts">
     <div className="container">

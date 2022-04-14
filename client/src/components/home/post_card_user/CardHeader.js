@@ -34,7 +34,7 @@ const CardHeader = ({ post, user }) => {
     navigator.clipboard.writeText(`${BASE_URL}/post/${post._id}`)
   };
 
-  // console.log(user[0].avatar)
+  console.log(user[0].avatar)
   // console.log(post)
 
   return (

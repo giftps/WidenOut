@@ -38,7 +38,7 @@ export const createPost = ({content, images, auth, socket}) => async dispatch =>
           recipients: res.data.newPost.user.followers,
           url: `/post/${res.data.newPost._id}`,
           content, 
-          image: media[0].url
+          // image: media[0].url
         };
 
         dispatch(createNotify({msg, auth, socket}));
