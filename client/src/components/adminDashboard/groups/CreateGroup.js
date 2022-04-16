@@ -14,7 +14,7 @@ const RegisterGroup = () => {
     story: "",
   };
   const [userData, setUserData] = useState(initialState);
-  const { fullname, username, story} = userData;
+  const { fullname, username, story } = userData;
 
   useEffect(() => {
     if (auth.token) history.push("/");
@@ -25,10 +25,19 @@ const RegisterGroup = () => {
     setUserData({ ...userData, [name]: value });
   };
 
+  function makeid(l) {
+    var text = "";
+    var char_list = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+    for (var i = 0; i < l; i++) {
+      text += char_list.charAt(Math.floor(Math.random() * char_list.length));
+    }
+    return text;
+  }
+
   const handleSubmit = (e) => {
     e.preventDefault();
     userData.role = "group";
-    userData.email = "group-admin@widenout.com";
+    userData.email = "group-admin@widenout."+makeid(3);
     userData.password = "group-password";
     userData.cf_password = "group-password";
     // console.log(userData);
