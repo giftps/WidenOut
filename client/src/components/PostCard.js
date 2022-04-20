@@ -1,3 +1,4 @@
+/* eslint-disable array-callback-return */
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable no-nested-ternary */
@@ -52,12 +53,26 @@ const PostCard = ({ post, user, theme }) => {
     const [anchorEl, setAnchorEl] = React.useState(null);
     const open = Boolean(anchorEl);
     const [readMore, setReadMore] = React.useState();
-
+    const [settings, setSettings] = React.useState({
+        width: '100%',
+        height: ['250px', '170px'],
+        layout: [1, 4],
+        photos: []
+    });
     const [openSnac, setOpenSnac] = React.useState(false);
     const [message, setMessage] = React.useState('');
 
     React.useEffect(() => {
-        console.log(post);
+        if (post.images.length !== 0) {
+            // const layouts = [1, post.images.length];
+            // const photos = [];
+            settings.layout = [1, post.images.length];
+            post.images.map((urls) => {
+                settings.photos.push({ source: urls.url });
+            });
+
+            setSettings(settings);
+        }
     }, []);
 
     const handleClickSnac = (msg) => {
@@ -184,7 +199,7 @@ const PostCard = ({ post, user, theme }) => {
                     )}
                 </Typography>
             </CardContent>
-            <PostFooter post={post} />
+            <PostFooter photos={settings} post={post} />
             <PostComments post={post} />
             {/* Snackbar */}
             <Snackbar open={openSnac} autoHideDuration={6000} onClose={handleCloseSnac}>

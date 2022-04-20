@@ -1,3 +1,5 @@
+/* eslint-disable jsx-a11y/no-static-element-interactions */
+/* eslint-disable jsx-a11y/click-events-have-key-events */
 import PropTypes from 'prop-types';
 import { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
@@ -77,6 +79,7 @@ const PostCard = ({ isLoading }) => {
                                 borderRadius: 20,
                                 padding: 10
                             }}
+                            onClick={() => handleOpen()}
                         >
                             {auth.user.username}, widen out...
                         </div>
@@ -88,20 +91,17 @@ const PostCard = ({ isLoading }) => {
                         <Button onClick={() => handleOpen()} style={{ marginRight: 10 }}>
                             Camera
                         </Button>
-                        <Button>Photos</Button>
+                        <Button onClick={() => handleOpen()}>Photos</Button>
                     </div>
                 </Grid>
 
                 <Modal
-                    keepMounted
                     open={open}
                     onClose={handleClose}
                     aria-labelledby="keep-mounted-modal-title"
                     aria-describedby="keep-mounted-modal-description"
                 >
-                    <Box sx={style}>
-                        <StatusModal />
-                    </Box>
+                    <StatusModal onClose={handleClose} />
                 </Modal>
             </MainCard>
         </>

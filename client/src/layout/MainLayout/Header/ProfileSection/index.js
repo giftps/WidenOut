@@ -168,7 +168,7 @@ const ProfileSection = () => {
                                     </Box>
                                     <PerfectScrollbar style={{ height: '100%', maxHeight: 'calc(100vh - 250px)', overflowX: 'hidden' }}>
                                         <Box sx={{ p: 2 }}>
-                                            <UpgradePlanCard />
+                                            {/* <UpgradePlanCard /> */}
                                             <Divider />
                                             <List
                                                 component="nav"
@@ -210,7 +210,7 @@ const ProfileSection = () => {
                                                                 <Grid item>
                                                                     <Typography variant="body2">Social Profile</Typography>
                                                                 </Grid>
-                                                                <Grid item>
+                                                                {/* <Grid item>
                                                                     <Chip
                                                                         label="02"
                                                                         size="small"
@@ -219,7 +219,7 @@ const ProfileSection = () => {
                                                                             color: theme.palette.background.default
                                                                         }}
                                                                     />
-                                                                </Grid>
+                                                                </Grid> */}
                                                             </Grid>
                                                         }
                                                     />

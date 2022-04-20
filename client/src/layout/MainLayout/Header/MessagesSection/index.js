@@ -52,7 +52,7 @@ const MessagesSection = () => {
     const anchorRef = useRef(null);
 
     const handleToggle = () => {
-        navigate(`/message/${auth.user._id}`);
+        navigate(`/message`);
     };
 
     const handleClose = (event) => {

@@ -53,7 +53,7 @@ const GroupsSection = () => {
 
     const handleToggle = () => {
         // setOpen((prevOpen) => !prevOpen);
-        navigate(`/groups/${auth.user._id}`);
+        navigate(`/groups`);
     };
 
     const handleClose = (event) => {

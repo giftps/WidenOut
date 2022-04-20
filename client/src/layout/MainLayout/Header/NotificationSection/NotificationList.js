@@ -120,7 +120,7 @@ const NotificationList = () => {
                                 {msg.text}
                                 {msg.content && <Typography variant="subtitle2">{msg.content.slice(0, 20)}...</Typography>}
                             </Grid>
-                            <Grid item xs={12}>
+                            {/* <Grid item xs={12}>
                                 <Grid container>
                                     <Grid item>
                                         <Chip label="Unread" sx={chipErrorSX} />
@@ -129,7 +129,7 @@ const NotificationList = () => {
                                         <Chip label="New" sx={chipWarningSX} />
                                     </Grid>
                                 </Grid>
-                            </Grid>
+                            </Grid> */}
                         </Grid>
                     </ListItemWrapper>
                     <Divider sx={{ mt: 4.25, mb: 1.25 }} />

@@ -9,7 +9,7 @@ import { createPost, updatePost } from '../redux/actions/postAction';
 import Icons from './Icons';
 import { imageShow, videoShow } from '../utils/mediaShow';
 
-const StatusModal = () => {
+const StatusModal = ({ onClose }) => {
     const { auth, theme, status, socket } = useSelector((state) => state);
     const dispatch = useDispatch();
 
@@ -114,7 +114,7 @@ const StatusModal = () => {
             <form onSubmit={handleSubmit}>
                 <div className="status_header">
                     <h5 className="m-0">Create Post</h5>
-                    <span onClick={() => dispatch({ type: GLOBALTYPES.STATUS, payload: false })}>&times;</span>
+                    <span onClick={() => onClose()}>&times;</span>
                 </div>
                 <div className="status_body">
                     <textarea
