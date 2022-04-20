@@ -1,7 +1,6 @@
-/* eslint-disable jsx-a11y/no-static-element-interactions */
-/* eslint-disable consistent-return */
-/* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable no-nested-ternary */
+/* eslint-disable jsx-a11y/no-static-element-interactions */
+/* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable no-return-assign */
 /* eslint-disable no-underscore-dangle */
 import React, { useState, useRef, useEffect } from 'react';
@@ -85,12 +84,6 @@ const StatusModal = ({ user }) => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        if (images.length === 0) {
-            return dispatch({
-                type: GLOBALTYPES.ALERT,
-                payload: { error: 'Add image(s).' }
-            });
-        }
 
         // const group = user._id
         console.log(group);

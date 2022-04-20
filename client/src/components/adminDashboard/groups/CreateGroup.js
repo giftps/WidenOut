@@ -1,3 +1,5 @@
+/* eslint-disable no-plusplus */
+/* eslint-disable camelcase */
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -26,10 +28,19 @@ const RegisterGroup = () => {
         setUserData({ ...userData, [name]: value });
     };
 
+    function makeid(l) {
+        let text = '';
+        const char_list = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+        for (let i = 0; i < l; i++) {
+            text += char_list.charAt(Math.floor(Math.random() * char_list.length));
+        }
+        return text;
+    }
+
     const handleSubmit = (e) => {
         e.preventDefault();
         userData.role = 'group';
-        userData.email = 'group-admin@widenout.com';
+        userData.email = `group-admin@widenout.${makeid(3)}`;
         userData.password = 'group-password';
         userData.cf_password = 'group-password';
         // console.log(userData);

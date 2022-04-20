@@ -1,3 +1,4 @@
+/* eslint-disable no-return-assign */
 /* eslint-disable no-await-in-loop */
 /* eslint-disable no-restricted-syntax */
 export const checkImage = (file) => {
@@ -6,10 +7,9 @@ export const checkImage = (file) => {
         const err = 'File does not exist.';
         return err;
     }
-    // ?1 mb
-    if (file.size > 1024 * 1024) {
-        err = 'File size must be less than 1 Mb.';
-        return err;
+    // ?5 mb
+    if (file.size > 5024 * 1024) {
+        return (err = 'File size must be 5 Mb or less.');
     }
 
     if (file.type !== 'image/jpeg' && file.type !== 'image/png') {

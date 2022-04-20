@@ -29,7 +29,6 @@ export const createPost =
             }
 
             const res = await postDataAPI('posts', { content, group, images: media }, auth.token);
-            console.log(res);
 
             dispatch({ type: POST_TYPES.CREATE_POST, payload: { ...res.data.newPost, user: auth.user } });
 
@@ -42,8 +41,8 @@ export const createPost =
                 recipients: res.data.newPost.user.followers,
                 url: `/post/${res.data.newPost._id}`,
                 content,
-                group,
-                image: media.length !== 0 ? media[0].url : ''
+                group
+                // image: media[0].url
             };
 
             dispatch(createNotify({ msg, auth, socket }));
@@ -119,8 +118,8 @@ export const likePost =
                 text: 'Liked your post.',
                 recipients: [post.user._id],
                 url: `/post/${post._id}`,
-                content: post.content,
-                image: post.images[0].url
+                content: post.content
+                // image: post.images[0].url,
             };
 
             dispatch(createNotify({ msg, auth, socket }));

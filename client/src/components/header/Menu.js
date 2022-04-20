@@ -44,7 +44,7 @@ const Menu = () => {
                         data-bs-toggle="dropdown"
                         aria-expanded="false"
                     >
-                        <span style={{ color: notify.data.length > 0 ? 'var(--c1)' : '' }} className={`material-icons `}>
+                        <span style={{ color: notify.data.length > 0 ? '#d42d2dcc' : '#0d6efd' }} className={`material-icons `}>
                             notifications
                         </span>
                         <span className="notify_length">{notify.data.length}</span>

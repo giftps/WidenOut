@@ -1,7 +1,7 @@
 /* eslint-disable no-nested-ternary */
-/* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable jsx-a11y/no-static-element-interactions */
-/* eslint-disable consistent-return */
+/* eslint-disable jsx-a11y/click-events-have-key-events */
+/* eslint-disable no-return-assign */
 import React, { useState, useRef, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { GLOBALTYPES } from '../redux/actions/globalTypes';
@@ -24,17 +24,15 @@ const StatusModal = () => {
 
     const handleChangeImages = (e) => {
         const files = [...e.target.files];
-        const err = '';
+        let err = '';
         const newImages = [];
 
         files.forEach((file) => {
             if (!file) {
-                const err = 'File does not exist.';
-                return err;
+                return (err = 'File does not exist.');
             }
             if (file.size > 1024 * 1024 * 5) {
-                const err = 'Image size must be less than 5 mb.';
-                return err;
+                return (err = 'Image size must be less than 5 mb.');
             }
             return newImages.push(file);
         });
@@ -86,12 +84,6 @@ const StatusModal = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        // if (images.length === 0) {
-        //     return dispatch({
-        //         type: GLOBALTYPES.ALERT,
-        //         payload: { error: 'Add image(s).' }
-        //     });
-        // }
 
         if (status.onEdit) {
             dispatch(updatePost({ content, images, auth, status }));
@@ -128,8 +120,9 @@ const StatusModal = () => {
                     <textarea
                         onChange={(e) => setContent(e.target.value)}
                         value={content}
+                        id="input"
                         name="content"
-                        // placeholder={auth.user.username ? `${auth.user.username}, widen out` : 'widen out'}
+                        placeholder={`${auth.user.username}, widen out`}
                         style={{
                             filter: theme ? 'invert(1)' : 'invert(0)',
                             color: theme ? 'white' : '#111',

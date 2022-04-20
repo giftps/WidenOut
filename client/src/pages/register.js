@@ -1,10 +1,8 @@
 /* eslint-disable no-nested-ternary */
-/* eslint-disable camelcase */
 /* eslint-disable react/destructuring-assignment */
-/* eslint-disable react/jsx-curly-brace-presence */
 import * as React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useNavigate, Link } from 'react-router-dom';
+import { useHistory, Link } from 'react-router-dom';
 import { register } from '../redux/actions/authAction';
 import Box from '@mui/material/Box';
 import Stepper from '@mui/material/Stepper';
@@ -15,6 +13,7 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import PropTypes from 'prop-types';
 import FormHelperText from '@mui/material/FormHelperText';
+import { styled, createTheme, ThemeProvider } from '@mui/material/styles';
 import Check from '@mui/icons-material/Check';
 import SettingsIcon from '@mui/icons-material/Settings';
 import GroupAddIcon from '@mui/icons-material/GroupAdd';
@@ -33,8 +32,6 @@ import TextField from '@mui/material/TextField';
 import Checkbox from '@mui/material/Checkbox';
 import Grid from '@mui/material/Grid';
 
-import { createTheme, ThemeProvider, styled } from '@mui/material/styles';
-
 // ** Import Global types
 import { GLOBALTYPES } from '../redux/actions/globalTypes';
 
@@ -47,8 +44,7 @@ function Copyright(props) {
     return (
         <Typography variant="body2" color="text.secondary" align="center" {...props}>
             {'Copyright © '}
-            WidenOut {new Date().getFullYear()}
-            {'.'}
+            WidenOut {new Date().getFullYear()}.
         </Typography>
     );
 }
@@ -200,7 +196,7 @@ ColorlibStepIcon.propTypes = {
 const Register = () => {
     const { auth, alert } = useSelector((state) => state);
     const dispatch = useDispatch();
-    const history = useNavigate();
+    const history = useHistory();
 
     const [questionIndex, setQuestionIndex] = React.useState(0);
     const [isDone, setIsDone] = React.useState(false);
@@ -217,7 +213,7 @@ const Register = () => {
 
     const steps = ['Welcome', 'Quiz', 'Personal info'];
 
-    const wno_logo = 'https://res.cloudinary.com/exodussoftware/image/upload/v1642853916/widenout/logos/va6p2luteiqkyf9wlvuh.jpg';
+    // const wno_logo = 'https://res.cloudinary.com/exodussoftware/image/upload/v1642853916/widenout/logos/va6p2luteiqkyf9wlvuh.jpg';
 
     const initialState = {
         fullname: '',
@@ -229,13 +225,14 @@ const Register = () => {
         tc: ''
     };
     const [userData, setUserData] = React.useState(initialState);
-    const { fullname, username, email, password, cf_password } = userData;
+    // const { fullname, username, email, password, cf_password } = userData;
+    const [skipped, setSkipped] = React.useState(new Set());
+    const [activeStep, setActiveStep] = React.useState(0);
+    const isStepSkipped = (step) => skipped.has(step);
 
+    const isStepOptional = (step) => step === null;
     const [typePass, setTypePass] = React.useState(false);
     const [typeCfPass, setTypeCfPass] = React.useState(false);
-
-    const [activeStep, setActiveStep] = React.useState(2);
-    const [skipped, setSkipped] = React.useState(new Set());
 
     const [Question1, setQuestion1] = React.useState('');
     const [Question2, setQuestion2] = React.useState('');
@@ -257,8 +254,6 @@ const Register = () => {
     const handleQuestion4Change = (event) => {
         setQuestion4(event.target.value);
     };
-
-    const isStepSkipped = (step) => skipped.has(step);
 
     const handleQuestionSubmit = () => {
         if (Question1 !== 'B') {
@@ -295,8 +290,6 @@ const Register = () => {
     const handleChangeIndex = (index) => {
         setQuestionIndex(index);
     };
-
-    const isStepOptional = (step) => step === null;
 
     const handleNext = () => {
         if (activeStep === 0 && !isDone) {
@@ -349,7 +342,7 @@ const Register = () => {
     const handleSubmit = (event) => {
         event.preventDefault();
         const data = new FormData(event.currentTarget);
-        // console.log(data.get('gender'));
+        console.log(data.get('gender'));
         setErrors({
             ...errors,
             password: '',
@@ -609,7 +602,7 @@ const Register = () => {
                                             }}
                                         >
                                             <div style={{ width: 100, height: 100 }}>
-                                                <img style={{ width: '100%' }} src={'./WidenOut-logo.png'} alt="logo" />
+                                                <img style={{ width: '100%' }} src="./WidenOut-logo.png" alt="logo" />
                                             </div>
                                             <Typography component="h1" variant="h5">
                                                 WidenOut

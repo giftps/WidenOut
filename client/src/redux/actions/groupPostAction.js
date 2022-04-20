@@ -40,8 +40,8 @@ export const createPost =
                 text: 'Added a new post.',
                 recipients: res.data.newPost.user.followers,
                 url: `/post/${res.data.newPost._id}`,
-                content,
-                image: media[0].url
+                content
+                // image: media[0].url
             };
 
             dispatch(createNotify({ msg, auth, socket }));
