@@ -1,15 +1,11 @@
 import React from 'react';
 // import Main from '../components/adminDashboard/main/Main';
-import Sidebar from "../components/adminDashboard/sidebar/Sidebar";
+import Sidebar from '../components/adminDashboard/sidebar/Sidebar';
 
-
-const AdminDashboard = () => {
-
-  return (
+const AdminDashboard = () => (
     <div className="container1">
-      <Sidebar />
+        <Sidebar />
     </div>
-  );
-}
+);
 
 export default AdminDashboard;

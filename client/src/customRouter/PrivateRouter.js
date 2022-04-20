@@ -1,9 +1,10 @@
-import React from 'react'
-import { Route, Redirect } from "react-router-dom";
+/* eslint-disable react/destructuring-assignment */
+import React from 'react';
+import { Route, Navigate } from 'react-router-dom';
 
-const PrivateRouter = (props) => {
+const PrivateRouter = ({ children, props }) => {
     const firstLogin = localStorage.getItem('firstLogin');
-    return firstLogin ? <Route {...props} /> :  <Redirect to="/" />
-}
+    return firstLogin ? <>{children}</> : <Navigate to="/" />;
+};
 
-export default PrivateRouter
+export default PrivateRouter;

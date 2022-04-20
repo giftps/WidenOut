@@ -1,14 +1,13 @@
-import { GLOBALTYPES } from "../actions/globalTypes";
-
+import { GLOBALTYPES } from '../actions/globalTypes';
 
 const statusReducer = (state = false, action) => {
-  switch (action.type) {
-    case GLOBALTYPES.STATUS:
-      return action.payload;
+    switch (action.type) {
+        case GLOBALTYPES.STATUS:
+            return action.payload;
 
-    default:
-      return state;
-  }
+        default:
+            return state;
+    }
 };
 
 export default statusReducer;

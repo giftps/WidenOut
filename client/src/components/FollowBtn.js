@@ -1,24 +1,25 @@
+/* eslint-disable no-underscore-dangle */
 import React, { useState, useEffect } from 'react';
-import { useDispatch, useSelector } from "react-redux";
-import { follow, unfollow } from "../redux/actions/profileAction";
+import { useDispatch, useSelector } from 'react-redux';
+import { follow, unfollow } from '../redux/actions/profileAction';
 
-const FollowBtn = ({user}) => {
-    const [ followed, setFollowed ] = useState(false);
+const FollowBtn = ({ user }) => {
+    const [followed, setFollowed] = useState(false);
 
-    const { auth, profile, socket } = useSelector(state => state);
+    const { auth, profile, socket } = useSelector((state) => state);
     const dispatch = useDispatch();
 
     const [load, setLoad] = useState(false);
 
     useEffect(() => {
-      if (auth.user.following.find((item) => item._id === user._id)) {
-        setFollowed(true);
-      }
-      return () => setFollowed(false);
+        if (auth.user.following.find((item) => item._id === user._id)) {
+            setFollowed(true);
+        }
+        return () => setFollowed(false);
     }, [auth.user.following, user._id]);
 
     const handleFollow = async () => {
-        if(load) return;
+        if (load) return;
 
         setFollowed(true);
         setLoad(true);
@@ -27,28 +28,27 @@ const FollowBtn = ({user}) => {
     };
 
     const handleUnFollow = async () => {
-      if (load) return;
+        if (load) return;
 
-      setFollowed(false);
-      setLoad(true);
-      await dispatch(unfollow({ users: profile.users, user, auth, socket }));
-      setLoad(false);
+        setFollowed(false);
+        setLoad(true);
+        await dispatch(unfollow({ users: profile.users, user, auth, socket }));
+        setLoad(false);
     };
 
-
     return (
-      <>
-        {followed ? (
-          <button className="btn-1 hover-in-shadow outer-shadow" onClick={handleUnFollow}>
-            Unfollow
-          </button>
-        ) : (
-          <button className="btn-1 hover-in-shadow outer-shadow" onClick={handleFollow}>
-            Follow
-          </button>
-        )}
-      </>
+        <>
+            {followed ? (
+                <button type="button" className="btn-1 hover-in-shadow outer-shadow" onClick={handleUnFollow}>
+                    Unfollow
+                </button>
+            ) : (
+                <button type="button" className="btn-1 hover-in-shadow outer-shadow" onClick={handleFollow}>
+                    Follow
+                </button>
+            )}
+        </>
     );
-}
+};
 
-export default FollowBtn
+export default FollowBtn;

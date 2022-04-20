@@ -1,277 +1,276 @@
-import { GLOBALTYPES } from "./globalTypes";
-import { postDataAPI, getDataAPI, patchDataAPI, deleteDataAPI } from "../../utils/fetchData";
-import { imageUpload } from "../../utils/imageUpload";
-import { createNotify, removeNotify } from "./notifyAction";
-
+/* eslint-disable consistent-return */
+/* eslint-disable no-underscore-dangle */
+import { GLOBALTYPES } from './globalTypes';
+import { postDataAPI, getDataAPI, patchDataAPI, deleteDataAPI } from '../../utils/fetchData';
+import { imageUpload } from '../../utils/imageUpload';
+import { createNotify, removeNotify } from './notifyAction';
 
 export const POST_G_TYPES = {
-  CREATE_G_POST: "CREATE_G_POST",
-  LOADING_G_POST: "LOADING_G_POST",
-  GET_G_POSTS: "GET_G_POSTS",
-  UPDATE_G_POST: "UPDATE_G_POST",
-  GET_G_POST: "GET_G_POST",
-  DELETE_G_POST: "DELETE_G_POST",
-  REPORT_G_POST: "REPORT_G_POST",
-  SAVE_G_POST: "SAVE_G_POST",
+    CREATE_G_POST: 'CREATE_G_POST',
+    LOADING_G_POST: 'LOADING_G_POST',
+    GET_G_POSTS: 'GET_G_POSTS',
+    UPDATE_G_POST: 'UPDATE_G_POST',
+    GET_G_POST: 'GET_G_POST',
+    DELETE_G_POST: 'DELETE_G_POST',
+    REPORT_G_POST: 'REPORT_G_POST',
+    SAVE_G_POST: 'SAVE_G_POST'
 };
 
-export const createPost = ({content, images, auth, socket}) => async dispatch => {
-    let media = [];
+export const createPost =
+    ({ content, images, auth, socket }) =>
+    async (dispatch) => {
+        let media = [];
 
+        try {
+            dispatch({ type: GLOBALTYPES.ALERT, payload: { loading: true } });
+
+            if (images.length > 0) {
+                media = await imageUpload(images);
+            }
+
+            const res = await postDataAPI('g_posts', { content, images: media }, auth.token);
+
+            dispatch({ type: POST_G_TYPES.CREATE_G_POST, payload: { ...res.data.newPost, user: auth.user } });
+
+            dispatch({ type: GLOBALTYPES.ALERT, payload: { loading: false } });
+
+            // todo notification
+            const msg = {
+                id: res.data.newPost._id,
+                text: 'Added a new post.',
+                recipients: res.data.newPost.user.followers,
+                url: `/post/${res.data.newPost._id}`,
+                content,
+                image: media[0].url
+            };
+
+            dispatch(createNotify({ msg, auth, socket }));
+        } catch (err) {
+            dispatch({
+                type: GLOBALTYPES.ALERT,
+                payload: {
+                    error: err.response.data.msg
+                }
+            });
+        }
+    };
+
+export const getgPosts = (token) => async (dispatch) => {
     try {
-        dispatch({ type: GLOBALTYPES.ALERT, payload: {loading: true} });
+        // dispatch({ type: POST_G_TYPES.LOADING_G_POST, payload: true  });
+        const res = await getDataAPI('g_posts', token);
+        // console.log(res);
+        dispatch({ type: POST_G_TYPES.GET_G_POSTS, payload: { ...res.data, page: 2 } });
 
-        if(images.length > 0){ media = await imageUpload(images)}
-
-        const res = await postDataAPI('g_posts', {content, images: media}, auth.token );
-
-        
-        dispatch({ type: POST_G_TYPES.CREATE_G_POST , payload: {...res.data.newPost, user: auth.user} });
-        
-        dispatch({ type: GLOBALTYPES.ALERT, payload: { loading: false } });
-        
-
-        // todo notification
-        const msg = {
-          id: res.data.newPost._id,
-          text: "Added a new post.",
-          recipients: res.data.newPost.user.followers,
-          url: `/post/${res.data.newPost._id}`,
-          content, 
-          image: media[0].url
-        };
-
-        dispatch(createNotify({msg, auth, socket}));
-
+        dispatch({ type: POST_G_TYPES.LOADING_G_POST, payload: false });
     } catch (err) {
         dispatch({
             type: GLOBALTYPES.ALERT,
             payload: {
                 error: err.response.data.msg
             }
-        })
-    }
-}
-
-
-export const getgPosts = (token) => async dispatch => {
-    try {
-        // dispatch({ type: POST_G_TYPES.LOADING_G_POST, payload: true  });
-        const res = await getDataAPI('g_posts', token);
-        // console.log(res);
-        dispatch({ type: POST_G_TYPES.GET_G_POSTS, payload: {...res.data, page: 2} });
-        
-        dispatch({ type: POST_G_TYPES.LOADING_G_POST, payload: false });
-
-        
-      } catch (err) {
-        dispatch({
-          type: GLOBALTYPES.ALERT,
-          payload: {
-            error: err.response.data.msg,
-          },
         });
     }
-}
-
-
-export const updatePost = ({ content, images, auth, status }) => async (dispatch) => {
-  let media = [];
-    const imgNewUrl = images.filter(img => !img.url);
-    const imgOldUrl = images.filter(img => img.url);
-    if(status.content === content && imgNewUrl.length === 0 && imgOldUrl.length === status.images.length){
-        return;
-    }
-  try {
-    dispatch({ type: GLOBALTYPES.ALERT, payload: { loading: true } });
-    if (imgNewUrl.length > 0) {
-      media = await imageUpload(imgNewUrl);
-    }
-    const res = await patchDataAPI(
-      `post/${status._id}`,
-      { content, images: [...imgOldUrl, ...media] },
-      auth.token
-    );
-    
-    dispatch({ type: POST_G_TYPES.UPDATE_G_POST, payload: res.data.newPost });
-    dispatch({ type: GLOBALTYPES.ALERT, payload: { success: res.data.msg } });
-  } catch (err) {
-    dispatch({
-      type: GLOBALTYPES.ALERT,
-      payload: {
-        error: err.response.data.msg,
-      },
-    });
-  }
 };
 
+export const updatePost =
+    ({ content, images, auth, status }) =>
+    async (dispatch) => {
+        let media = [];
+        const imgNewUrl = images.filter((img) => !img.url);
+        const imgOldUrl = images.filter((img) => img.url);
+        if (status.content === content && imgNewUrl.length === 0 && imgOldUrl.length === status.images.length) {
+            return;
+        }
+        try {
+            dispatch({ type: GLOBALTYPES.ALERT, payload: { loading: true } });
+            if (imgNewUrl.length > 0) {
+                media = await imageUpload(imgNewUrl);
+            }
+            const res = await patchDataAPI(`post/${status._id}`, { content, images: [...imgOldUrl, ...media] }, auth.token);
 
-export const likePost = ({ post, auth, socket }) => async (dispatch) => {
-  const newPost = {...post, likes: [...post.likes, auth.user]};
-
-  dispatch({type: POST_G_TYPES.UPDATE_G_POST, payload: newPost});
-  socket.emit("likePost", newPost);
-  
-  try {
-    await patchDataAPI(`post/${post._id}/like`, null, auth.token);
-
-    // todo notification
-    const msg = {
-      id: auth.user._id,
-      text: "Liked your post.",
-      recipients: [post.user._id],
-      url: `/post/${post._id}`,
-      content: post.content,
-      image: post.images[0].url,
+            dispatch({ type: POST_G_TYPES.UPDATE_G_POST, payload: res.data.newPost });
+            dispatch({ type: GLOBALTYPES.ALERT, payload: { success: res.data.msg } });
+        } catch (err) {
+            dispatch({
+                type: GLOBALTYPES.ALERT,
+                payload: {
+                    error: err.response.data.msg
+                }
+            });
+        }
     };
 
-    dispatch(createNotify({ msg, auth, socket }));
-  } catch (err) {
-    dispatch({
-      type: GLOBALTYPES.ALERT,
-      payload: {
-        error: err.response.data.msg,
-      },
-    });
-  }
-};
+export const likePost =
+    ({ post, auth, socket }) =>
+    async (dispatch) => {
+        const newPost = { ...post, likes: [...post.likes, auth.user] };
 
+        dispatch({ type: POST_G_TYPES.UPDATE_G_POST, payload: newPost });
+        socket.emit('likePost', newPost);
 
-export const unLikePost = ({ post, auth, socket }) => async (dispatch) => {
-  const newPost = { ...post, likes: post.likes.filter(like => like._id !== auth.user._id) };
+        try {
+            await patchDataAPI(`post/${post._id}/like`, null, auth.token);
 
-  dispatch({ type: POST_G_TYPES.UPDATE_G_POST, payload: newPost });
-  socket.emit("unLikePost", newPost);
+            // todo notification
+            const msg = {
+                id: auth.user._id,
+                text: 'Liked your post.',
+                recipients: [post.user._id],
+                url: `/post/${post._id}`,
+                content: post.content,
+                image: post.images[0].url
+            };
 
-  
-  try {
-    await patchDataAPI(`post/${post._id}/unlike`, null, auth.token);
-
-    // todo notification
-    const msg = {
-      id: auth.user._id,
-      text: "Liked your post.",
-      recipients: [post.user._id],
-      url: `/post/${post._id}`, 
+            dispatch(createNotify({ msg, auth, socket }));
+        } catch (err) {
+            dispatch({
+                type: GLOBALTYPES.ALERT,
+                payload: {
+                    error: err.response.data.msg
+                }
+            });
+        }
     };
 
-    dispatch(removeNotify({ msg, auth, socket }));
-  } catch (err) {
-    dispatch({
-      type: GLOBALTYPES.ALERT,
-      payload: {
-        error: err.response.data.msg,
-      },
-    });
-  }
-};
+export const unLikePost =
+    ({ post, auth, socket }) =>
+    async (dispatch) => {
+        const newPost = { ...post, likes: post.likes.filter((like) => like._id !== auth.user._id) };
 
+        dispatch({ type: POST_G_TYPES.UPDATE_G_POST, payload: newPost });
+        socket.emit('unLikePost', newPost);
 
-export const getgPost = ({ detailPost, id, auth }) => async (dispatch) => {
-  if(detailPost.every(post => post._id !== id )){
-    try {
-      const res = await getDataAPI(`g_post/${id}`, auth.token);
-      dispatch({ type: POST_G_TYPES.GET_G_POST, payload: res.data.post})
+        try {
+            await patchDataAPI(`post/${post._id}/unlike`, null, auth.token);
 
+            // todo notification
+            const msg = {
+                id: auth.user._id,
+                text: 'Liked your post.',
+                recipients: [post.user._id],
+                url: `/post/${post._id}`
+            };
 
-    } catch (err) {
-      dispatch({
-        type: GLOBALTYPES.ALERT,
-        payload: {
-          error: err.response.data.msg,
-        },
-      });
-    }
-  }
-};
-
-
-export const deletePost = ({ post, auth, socket }) => async (dispatch) => {
-  dispatch({ type: POST_G_TYPES.DELETE_G_POST, payload: post });
-
-  try {
-    const res = await deleteDataAPI(`post/${post._id}`, auth.token);
-
-    // todo notification
-    const msg = {
-      id: post._id,
-      text: "Added a new post.",
-      recipients: res.data.newPost.user.followers,
-      url: `/post/${post._id}`,
+            dispatch(removeNotify({ msg, auth, socket }));
+        } catch (err) {
+            dispatch({
+                type: GLOBALTYPES.ALERT,
+                payload: {
+                    error: err.response.data.msg
+                }
+            });
+        }
     };
 
-    dispatch(removeNotify({ msg, auth, socket }));
-  } catch (err) {
-    dispatch({
-      type: GLOBALTYPES.ALERT,
-      payload: {
-        error: err.response.data.msg,
-      },
-    });
-  }
-};
+export const getgPost =
+    ({ detailPost, id, auth }) =>
+    async (dispatch) => {
+        if (detailPost.every((post) => post._id !== id)) {
+            try {
+                const res = await getDataAPI(`g_post/${id}`, auth.token);
+                dispatch({ type: POST_G_TYPES.GET_G_POST, payload: res.data.post });
+            } catch (err) {
+                dispatch({
+                    type: GLOBALTYPES.ALERT,
+                    payload: {
+                        error: err.response.data.msg
+                    }
+                });
+            }
+        }
+    };
 
+export const deletePost =
+    ({ post, auth, socket }) =>
+    async (dispatch) => {
+        dispatch({ type: POST_G_TYPES.DELETE_G_POST, payload: post });
 
-export const reportPost = ({ post, auth }) => async (dispatch) => {
+        try {
+            const res = await deleteDataAPI(`post/${post._id}`, auth.token);
 
-  const reportExist = post.reports.find(report => report === auth.user._id);
+            // todo notification
+            const msg = {
+                id: post._id,
+                text: 'Added a new post.',
+                recipients: res.data.newPost.user.followers,
+                url: `/post/${post._id}`
+            };
 
-  if (reportExist && reportExist.length > 0) {
-    return dispatch({
-      type: GLOBALTYPES.ALERT,
-      payload: { error: "You have already reported this post." },
-    });
-  }
-    const newPost = { ...post };
-    newPost.reports.push(auth.user._id);
+            dispatch(removeNotify({ msg, auth, socket }));
+        } catch (err) {
+            dispatch({
+                type: GLOBALTYPES.ALERT,
+                payload: {
+                    error: err.response.data.msg
+                }
+            });
+        }
+    };
 
-  dispatch({ type: POST_G_TYPES.REPORT_G_POST, payload: newPost });
-  
+export const reportPost =
+    ({ post, auth }) =>
+    async (dispatch) => {
+        const reportExist = post.reports.find((report) => report === auth.user._id);
 
-try {
-  const res = await patchDataAPI(`post/${post._id}/report`, null, auth.token);
-  dispatch({ type: GLOBALTYPES.ALERT, payload: { success: res.data.msg } });
-} catch (err) {
-  dispatch({
-    type: GLOBALTYPES.ALERT,
-    payload: {
-      error: err.response.data.msg,
-    },
-  });
-}
-};
+        if (reportExist && reportExist.length > 0) {
+            return dispatch({
+                type: GLOBALTYPES.ALERT,
+                payload: { error: 'You have already reported this post.' }
+            });
+        }
+        const newPost = { ...post };
+        newPost.reports.push(auth.user._id);
 
-export const savePost = ({ post, auth }) => async (dispatch) => {
-  const newUser = {...auth.user, saved: [...auth.user.saved, post._id] };
+        dispatch({ type: POST_G_TYPES.REPORT_G_POST, payload: newPost });
 
-  dispatch({ type: GLOBALTYPES.AUTH, payload: {...auth, user: newUser}});
+        try {
+            const res = await patchDataAPI(`post/${post._id}/report`, null, auth.token);
+            dispatch({ type: GLOBALTYPES.ALERT, payload: { success: res.data.msg } });
+        } catch (err) {
+            dispatch({
+                type: GLOBALTYPES.ALERT,
+                payload: {
+                    error: err.response.data.msg
+                }
+            });
+        }
+    };
 
+export const savePost =
+    ({ post, auth }) =>
+    async (dispatch) => {
+        const newUser = { ...auth.user, saved: [...auth.user.saved, post._id] };
 
-  try {
-    await patchDataAPI(`savePost/${post._id}`, null, auth.token);
-  } catch (err) {
-    dispatch({
-      type: GLOBALTYPES.ALERT,
-      payload: {
-        error: err.response.data.msg,
-      },
-    });
-  }
-};
+        dispatch({ type: GLOBALTYPES.AUTH, payload: { ...auth, user: newUser } });
 
-export const unSavePost = ({ post, auth }) => async (dispatch) => {
-  const newUser = { ...auth.user, saved: auth.user.saved.filter(id => id !== post._id) };
+        try {
+            await patchDataAPI(`savePost/${post._id}`, null, auth.token);
+        } catch (err) {
+            dispatch({
+                type: GLOBALTYPES.ALERT,
+                payload: {
+                    error: err.response.data.msg
+                }
+            });
+        }
+    };
 
-  dispatch({ type: GLOBALTYPES.AUTH, payload: { ...auth, user: newUser } });
+export const unSavePost =
+    ({ post, auth }) =>
+    async (dispatch) => {
+        const newUser = { ...auth.user, saved: auth.user.saved.filter((id) => id !== post._id) };
 
-  try {
-    await patchDataAPI(`unSavePost/${post._id}`, null, auth.token);
-  } catch (err) {
-    dispatch({
-      type: GLOBALTYPES.ALERT,
-      payload: {
-        error: err.response.data.msg,
-      },
-    });
-  }
-};
+        dispatch({ type: GLOBALTYPES.AUTH, payload: { ...auth, user: newUser } });
+
+        try {
+            await patchDataAPI(`unSavePost/${post._id}`, null, auth.token);
+        } catch (err) {
+            dispatch({
+                type: GLOBALTYPES.ALERT,
+                payload: {
+                    error: err.response.data.msg
+                }
+            });
+        }
+    };

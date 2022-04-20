@@ -44,8 +44,7 @@ app.use('/api', require('./routes/groupRouter'));
 app.use('/api', require('./routes/gPostRouter'));
 //#endregion
 
-
-const URI = process.env.MONGODB_URL;
+const URI = process.env.MONGODB_URL_LOCAL;
 mongoose.connect(URI, {
     useCreateIndex:true,
     useFindAndModify:false,

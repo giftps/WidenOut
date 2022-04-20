@@ -1,102 +1,82 @@
-import { BrowserRouter as Router, Route } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
-import { useEffect } from "react";
-import io from 'socket.io-client'
+import { useEffect, useState } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 
-import PageRender from "./customRouter/PageRender";
-import PrivateRouter from "./customRouter/PrivateRouter";
-import Login from "./pages/login";
-import Register from "./pages/register";
-import Home from "./pages/home";
-import Alert from "./components/alert/Alert";
-import Header from "./components/header/Header";
-import StatusModal from "./components/StatusModal";
-import { refreshToken } from "./redux/actions/authAction";
-import { getPosts } from "./redux/actions/postAction";
-import { getSuggestions } from "./redux/actions/suggestionsAction";
-import { getNotifies } from "./redux/actions/notifyAction";
+// material ui
+import Modal from '@mui/material/Modal';
+import { ThemeProvider } from '@mui/material/styles';
+import { CssBaseline, StyledEngineProvider } from '@mui/material';
+import Box from '@mui/material/Box';
 
-import { getAllGroups } from "./redux/actions/groupAction";
-import { getgPosts } from "./redux/actions/groupPostAction";
+// project tools
+import io from 'socket.io-client';
 
-import AdminDashboard from "./pages/adminDashboard";
-import { GLOBALTYPES } from "./redux/actions/globalTypes";
-import SocketClient from "./SocketClient";
+import Alert from './components/alert/Alert';
+import StatusModal from './components/StatusModal';
+import { refreshToken } from './redux/actions/authAction';
+import { getPosts } from './redux/actions/postAction';
+import { getSuggestions } from './redux/actions/suggestionsAction';
+import { getNotifies } from './redux/actions/notifyAction';
 
-function App() {
-  const { auth, status, modal, userType } = useSelector((state) => state);
-  const dispatch = useDispatch();
+import { getAllGroups } from './redux/actions/groupAction';
+import { getgPosts } from './redux/actions/groupPostAction';
 
-  useEffect(() => {
-    dispatch(refreshToken());
+import { GLOBALTYPES } from './redux/actions/globalTypes';
+import SocketClient from './SocketClient';
 
-    const socket = io();
-    dispatch({type: GLOBALTYPES.SOCKET, payload: socket })
-    return () => socket.close()
-  }, [dispatch]);
+// routing
+import Routes from 'routes';
 
+// defaultTheme
+import themes from 'themes';
 
-  useEffect(() => {
-    if (auth.token) {
-      dispatch(getPosts(auth.token));
-      dispatch(getSuggestions(auth.token));
-      dispatch(getNotifies(auth.token));
-      dispatch(getAllGroups(auth.token));
-      dispatch(getgPosts(auth.token));
-    }
-  }, [dispatch, auth.token]);
+// project imports
+import NavigationScroll from 'layout/NavigationScroll';
 
-  useEffect(() => {
-    if (!("Notification" in window)) {
-      alert("This browser does not support desktop notification");
-    } else if (Notification.permission === "granted") {
+// ==============================|| APP ||============================== //
 
-    } else if (Notification.permission !== "denied") {
-      Notification.requestPermission().then(function (permission) {
-        if (permission === "granted") {
+const App = () => {
+    const customization = useSelector((state) => state.customization);
+    const { auth, status, modal, userType } = useSelector((state) => state);
+    const dispatch = useDispatch();
+
+    useEffect(() => {
+        dispatch(refreshToken());
+
+        const socket = io();
+        dispatch({ type: GLOBALTYPES.SOCKET, payload: socket });
+        return () => socket.close();
+    }, [dispatch, status]);
+
+    useEffect(() => {
+        if (auth.token) {
+            dispatch(getPosts(auth.token));
+            dispatch(getSuggestions(auth.token));
+            dispatch(getNotifies(auth.token));
+            dispatch(getAllGroups(auth.token));
+            dispatch(getgPosts(auth.token));
         }
-      });
-    }
-  }, [])
+    }, [dispatch, auth.token]);
 
-   
+    useEffect(() => {
+        if (!('Notification' in window)) {
+            alert('This browser does not support desktop notification');
+        } else if (Notification.permission !== 'denied') {
+            Notification.requestPermission().then((permission) => {});
+        }
+    }, []);
 
-  return (
-    <Router>
-      <Alert />
-      <input type="checkbox" id="theme" />
-      <div className={`App ${(status || modal) && "mode"}`}>
-        <div className="main">
-          {userType === "user" && auth.token && <Header />}
-          {status && <StatusModal />}
-          {auth.token && <SocketClient /> }
-          <Route
-            exact
-            path="/"
-            component={
-              userType === "user"
-                ? auth.token
-                  ? Home
-                  : Login
-                : auth.token
-                ? AdminDashboard
-                : Login
-            }
-          />
-
-          {userType === "user" && (
-            <>
-              <Route exact path="/register" component={Register} />
-              <div className="wrap_page">
-                <PrivateRouter exact path="/:page" component={PageRender} />
-                <PrivateRouter exact path="/:page/:id" component={PageRender} />
-              </div>
-            </>
-          )}
-        </div>
-      </div>
-    </Router>
-  );
-}
+    return (
+        <StyledEngineProvider injectFirst>
+            {auth.token && <SocketClient />}
+            <ThemeProvider theme={themes(customization)}>
+                <CssBaseline />
+                <Alert />
+                <NavigationScroll>
+                    <Routes />
+                </NavigationScroll>
+            </ThemeProvider>
+        </StyledEngineProvider>
+    );
+};
 
 export default App;
