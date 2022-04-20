@@ -2,7 +2,7 @@
 /* eslint-disable react/destructuring-assignment */
 import * as React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useHistory, Link } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { register } from '../redux/actions/authAction';
 import Box from '@mui/material/Box';
 import Stepper from '@mui/material/Stepper';
@@ -196,7 +196,7 @@ ColorlibStepIcon.propTypes = {
 const Register = () => {
     const { auth, alert } = useSelector((state) => state);
     const dispatch = useDispatch();
-    const history = useHistory();
+    const navigate = useNavigate();
 
     const [questionIndex, setQuestionIndex] = React.useState(0);
     const [isDone, setIsDone] = React.useState(false);
@@ -280,8 +280,8 @@ const Register = () => {
     };
 
     React.useEffect(() => {
-        if (auth.token) history.push('/');
-    }, [auth.token, history]);
+        if (auth.token) navigate('/');
+    }, [auth.token]);
 
     const handleChangeQuestionIndex = (event, value) => {
         setQuestionIndex(value);
