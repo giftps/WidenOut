@@ -22,7 +22,6 @@ const postCtrl = {
     try {
       const { content, images, group } = req.body;
 
-
       const newPost = new Posts({
         content,
         group,

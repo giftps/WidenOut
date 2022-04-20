@@ -1,13 +1,13 @@
-import { GLOBALTYPES } from "../actions/globalTypes";
+import { GLOBALTYPES } from '../actions/globalTypes';
 
-const userTypeReducer = (state = "user", action) => {
-  switch (action.type) {
-    case GLOBALTYPES.USER_TYPE:
-      return action.payload;
+const userTypeReducer = (state = 'user', action) => {
+    switch (action.type) {
+        case GLOBALTYPES.USER_TYPE:
+            return action.payload;
 
-    default:
-      return state;
-  }
+        default:
+            return state;
+    }
 };
 
 export default userTypeReducer;

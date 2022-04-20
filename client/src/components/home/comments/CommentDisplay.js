@@ -1,51 +1,40 @@
-import React, { useEffect, useState } from 'react'
-import CommentCard from './CommentCard'
+/* eslint-disable no-underscore-dangle */
+/* eslint-disable jsx-a11y/no-static-element-interactions */
+/* eslint-disable jsx-a11y/click-events-have-key-events */
+import React, { useEffect, useState } from 'react';
+import CommentCard from './CommentCard';
 
 const CommentDisplay = ({ comment, post, replyCm }) => {
-  const [showRep, setShowRep] = useState([]);
-  const [next, setNext] = useState(1);
+    const [showRep, setShowRep] = useState([]);
+    const [next, setNext] = useState(1);
 
-  useEffect(() => {
-    setShowRep(replyCm.slice(replyCm.length - next));
-  }, [replyCm, next]);
+    useEffect(() => {
+        setShowRep(replyCm.slice(replyCm.length - next));
+    }, [replyCm, next]);
 
-  return (
-    <div className="comment_display">
-      <CommentCard post={post} comment={comment} commentId={comment._id}>
-        <div className="ps-4">
-          {showRep.map(
-            (item, index) =>
-              item.reply && (
-                <CommentCard
-                  comment={item}
-                  key={index}
-                  post={post}
-                  commentId={comment._id}
-                />
-              )
-          )}
+    return (
+        <div className="comment_display">
+            <CommentCard post={post} comment={comment} commentId={comment._id}>
+                <div className="ps-4">
+                    {showRep.map(
+                        (item, index) => item.reply && <CommentCard comment={item} key={index} post={post} commentId={comment._id} />
+                    )}
 
-          {replyCm.length - next > 0 ? (
-            <div
-              onClick={() => setNext(next + 10)}
-              style={{ cursor: "pointer", color: "crimson" }}
-            >
-              Load more...
-            </div>
-          ) : (
-            replyCm.length > 1 && (
-              <div
-                onClick={() => setNext(1)}
-                style={{ cursor: "pointer", color: "crimson" }}
-              >
-                Hide...
-              </div>
-            )
-          )}
+                    {replyCm.length - next > 0 ? (
+                        <div onClick={() => setNext(next + 10)} style={{ cursor: 'pointer', color: 'crimson' }}>
+                            Load more...
+                        </div>
+                    ) : (
+                        replyCm.length > 1 && (
+                            <div onClick={() => setNext(1)} style={{ cursor: 'pointer', color: 'crimson' }}>
+                                Hide...
+                            </div>
+                        )
+                    )}
+                </div>
+            </CommentCard>
         </div>
-      </CommentCard>
-    </div>
-  );
+    );
 };
 
-export default CommentDisplay
+export default CommentDisplay;
