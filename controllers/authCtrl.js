@@ -264,7 +264,6 @@ const authCtrl = {
       });
     } catch (err) {
       // console.log(err.message);
-
       return res.status(500).json({ msg: err.message });
     }
   },   

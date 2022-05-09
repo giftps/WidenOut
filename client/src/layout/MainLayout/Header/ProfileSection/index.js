@@ -81,6 +81,8 @@ const ProfileSection = () => {
 
     const prevOpen = useRef(open);
     useEffect(() => {
+        console.log(auth);
+
         if (prevOpen.current === true && open === false) {
             anchorRef.current.focus();
         }
@@ -112,7 +114,7 @@ const ProfileSection = () => {
                 }}
                 icon={
                     <Avatar
-                        src={auth.user.avatar}
+                        src={auth.user.avatar ? auth.user.avatar : ''}
                         sx={{
                             ...theme.typography.mediumAvatar,
                             margin: '8px 0 8px 8px !important',
@@ -159,7 +161,7 @@ const ProfileSection = () => {
                                         <Stack>
                                             <Stack direction="row" spacing={0.5} alignItems="center">
                                                 <Typography component="span" variant="h4" sx={{ fontWeight: 400 }}>
-                                                    {auth.user.username}
+                                                    test{/* {auth.user.username ? auth.user.username : ''} */}
                                                 </Typography>
                                             </Stack>
                                             <Typography variant="subtitle2">{auth.user.fullname}</Typography>
