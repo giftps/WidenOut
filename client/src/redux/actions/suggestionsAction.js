@@ -11,7 +11,7 @@ export const getSuggestions = (token) => async (dispatch) => {
         dispatch({ type: SUGGEST_TYPES.LOADING, payload: true });
 
         const res = await getDataAPI(`suggestionsUser`, token);
-
+        console.log(res);
         dispatch({ type: SUGGEST_TYPES.GET_USERS, payload: res.data });
 
         dispatch({ type: SUGGEST_TYPES.LOADING, payload: false });
