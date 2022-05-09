@@ -1,4 +1,5 @@
 /* eslint-disable no-underscore-dangle */
+// eslint-disable-next-line no-unused-vars
 import React, { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import PostCard from '../PostCard';

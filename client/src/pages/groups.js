@@ -45,10 +45,6 @@ const Home = () => {
                     <GPosts />
                 )}
             </div>
-
-            <div className="col-md-4">
-                <RightSideBarGroup />
-            </div>
         </div>
     );
 };
