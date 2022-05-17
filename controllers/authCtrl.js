@@ -171,7 +171,7 @@ const authCtrl = {
     try {
       const { email, password, isSocialLogin, socialData } = req.body;
 
-      const user = await Users.findOne({ email, role: "user" }).populate(
+      const user = await Users.findOne({ email, role: "admin" }).populate(
         "followers following",
         "-password"
       );

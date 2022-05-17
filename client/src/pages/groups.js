@@ -28,9 +28,10 @@ const Home = () => {
     }, []);
 
     return (
-        <div className="container home row mx-0 my-4">
+        <div className="container home row mx-0 my-8">
             <div className="col-md-2" />
             <div className="col-md-6">
+                <h3>Discover Cool Groups To Join</h3>
                 <AllGroups />
 
                 {/* {console.log(ghomePosts)} */}
@@ -42,7 +43,8 @@ const Home = () => {
                         There&apos;s no activity from your groups. Find some cool groups to join and the activity will show here
                     </h5>
                 ) : (
-                    <GPosts />
+                    // <GPosts />
+                    console.log(ghomePosts)
                 )}
             </div>
         </div>
