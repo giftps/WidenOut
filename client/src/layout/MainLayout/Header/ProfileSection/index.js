@@ -210,7 +210,7 @@ const ProfileSection = () => {
                                                         primary={
                                                             <Grid container spacing={1} justifyContent="space-between">
                                                                 <Grid item>
-                                                                    <Typography variant="body2">Social Profile</Typography>
+                                                                    <Typography variant="body2">My Profile</Typography>
                                                                 </Grid>
                                                                 {/* <Grid item>
                                                                     <Chip
