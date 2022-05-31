@@ -34,46 +34,46 @@ export const login = (data) => async (dispatch) => {
 
 export const changePassword =
     ({ oldPassword, newPassword, cnfNewPassword, auth }) =>
-    async (dispatch) => {
-        if (!oldPassword || oldPassword.length === 0) {
-            dispatch({
-                type: GLOBALTYPES.ALERT,
-                payload: { error: 'Please enter your old  password.' }
-            });
-        }
-        if (!newPassword || newPassword.length === 0) {
-            dispatch({
-                type: GLOBALTYPES.ALERT,
-                payload: { error: 'Please enter your new  password.' }
-            });
-        }
-        if (!cnfNewPassword || cnfNewPassword.length === 0) {
-            dispatch({
-                type: GLOBALTYPES.ALERT,
-                payload: { error: 'Please confirm your new  password.' }
-            });
-        }
-        if (newPassword !== cnfNewPassword) {
-            dispatch({
-                type: GLOBALTYPES.ALERT,
-                payload: { error: 'Your password does not match' }
-            });
-        }
+        async (dispatch) => {
+            if (!oldPassword || oldPassword.length === 0) {
+                dispatch({
+                    type: GLOBALTYPES.ALERT,
+                    payload: { error: 'Please enter your old  password.' }
+                });
+            }
+            if (!newPassword || newPassword.length === 0) {
+                dispatch({
+                    type: GLOBALTYPES.ALERT,
+                    payload: { error: 'Please enter your new  password.' }
+                });
+            }
+            if (!cnfNewPassword || cnfNewPassword.length === 0) {
+                dispatch({
+                    type: GLOBALTYPES.ALERT,
+                    payload: { error: 'Please confirm your new  password.' }
+                });
+            }
+            if (newPassword !== cnfNewPassword) {
+                dispatch({
+                    type: GLOBALTYPES.ALERT,
+                    payload: { error: 'Your password does not match' }
+                });
+            }
 
-        try {
-            dispatch({ type: GLOBALTYPES.ALERT, payload: { loading: true } });
+            try {
+                dispatch({ type: GLOBALTYPES.ALERT, payload: { loading: true } });
 
-            const res = await postDataAPI('changePassword', { oldPassword, newPassword }, auth.token);
+                const res = await postDataAPI('changePassword', { oldPassword, newPassword }, auth.token);
 
-            dispatch({ type: GLOBALTYPES.ALERT, payload: { loading: false } });
-            dispatch({ type: GLOBALTYPES.ALERT, payload: { success: res.data.msg } });
-        } catch (err) {
-            dispatch({
-                type: GLOBALTYPES.ALERT,
-                payload: { error: err.response.data.msg }
-            });
-        }
-    };
+                dispatch({ type: GLOBALTYPES.ALERT, payload: { loading: false } });
+                dispatch({ type: GLOBALTYPES.ALERT, payload: { success: res.data.msg } });
+            } catch (err) {
+                dispatch({
+                    type: GLOBALTYPES.ALERT,
+                    payload: { error: err.response.data.msg }
+                });
+            }
+        };
 
 export const adminLogin = (data) => async (dispatch) => {
     try {
