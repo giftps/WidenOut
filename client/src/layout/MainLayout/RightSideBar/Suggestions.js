@@ -2,6 +2,7 @@
 import { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
+import { Link, useLocation } from 'react-router-dom';
 
 // material-ui
 import { useTheme, styled } from '@mui/material/styles';
@@ -86,50 +87,52 @@ const SuggestionsCard = ({ isLoading, user }) => {
                 <CardWrapper border content={false}>
                     <Box sx={{ p: 2 }}>
                         <List sx={{ py: 0 }}>
-                            <ListItem alignItems="center" disableGutters sx={{ py: 0 }}>
-                                <ListItemAvatar>
-                                    <Avatar
-                                        src={user.avatar}
-                                        variant="rounded"
-                                        sx={{
-                                            ...theme.typography.commonAvatar,
-                                            ...theme.typography.largeAvatar,
-                                            backgroundColor: theme.palette.warning.light,
-                                            color: theme.palette.warning.dark
-                                        }}
-                                    />
-                                </ListItemAvatar>
-                                <ListItemText
-                                    sx={{
-                                        py: 0,
-                                        mt: 0.45,
-                                        mb: 0.45
-                                    }}
-                                    primary={<Typography variant="h4">{user.username}</Typography>}
-                                    secondary={
-                                        <Typography
-                                            variant="subtitle2"
+                            <Link to={`profile/${user._id}`}>
+                                <ListItem alignItems="center" disableGutters sx={{ py: 0 }}>
+                                    <ListItemAvatar>
+                                        <Avatar
+                                            src={user.avatar}
+                                            variant="rounded"
                                             sx={{
-                                                color: theme.palette.grey[500],
-                                                mt: 0.5
+                                                ...theme.typography.commonAvatar,
+                                                ...theme.typography.largeAvatar,
+                                                backgroundColor: theme.palette.warning.light,
+                                                color: theme.palette.warning.dark
                                             }}
-                                        >
-                                            {user.msg ? (
-                                                <>
-                                                    <div>{user.text}</div>
-                                                    {user.media.length > 0 && (
-                                                        <div>
-                                                            {user.media.length} <i className="fas fa-image" />
-                                                        </div>
-                                                    )}
-                                                </>
-                                            ) : (
-                                                user.fullname
-                                            )}
-                                        </Typography>
-                                    }
-                                />
-                            </ListItem>
+                                        />
+                                    </ListItemAvatar>
+                                    <ListItemText
+                                        sx={{
+                                            py: 0,
+                                            mt: 0.45,
+                                            mb: 0.45
+                                        }}
+                                        primary={<Typography variant="h4">{user.username}</Typography>}
+                                        secondary={
+                                            <Typography
+                                                variant="subtitle2"
+                                                sx={{
+                                                    color: theme.palette.grey[500],
+                                                    mt: 0.5
+                                                }}
+                                            >
+                                                {user.msg ? (
+                                                    <>
+                                                        <div>{user.text}</div>
+                                                        {user.media.length > 0 && (
+                                                            <div>
+                                                                {user.media.length} <i className="fas fa-image" />
+                                                            </div>
+                                                        )}
+                                                    </>
+                                                ) : (
+                                                    user.fullname
+                                                )}
+                                            </Typography>
+                                        }
+                                    />
+                                </ListItem>
+                            </Link>
                             {followed ? (
                                 <Button variant="contained" color="error" size="small" disableElevation onClick={handleUnFollow}>
                                     Unfollow

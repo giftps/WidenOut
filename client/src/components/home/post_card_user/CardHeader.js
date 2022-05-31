@@ -43,8 +43,8 @@ const CardHeader = ({ post, user }) => {
         <div className="card_header">
             <div className="d-flex">
                 <div className="outer-shadow big-avatar-cover me-2">
-                    <Avatar src={post.user.avatar} size="big-avatar" />
-                    {/* <Avatar src={user[0].avatar} size="big-avatar" /> */}
+                    {/* <Avatar src={post.user.avatar} size="big-avatar" /> */}
+                    <Avatar src={user[0].avatar} size="big-avatar" />
                 </div>
                 <div className="card_name">
                     <h6 className="m-0">

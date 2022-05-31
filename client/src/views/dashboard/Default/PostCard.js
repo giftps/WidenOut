@@ -22,6 +22,7 @@ import { GLOBALTYPES } from 'redux/actions/globalTypes';
 
 // chart data
 import StatusModal from 'components/StatusModal';
+import StatusPost from 'components/StatusPost';
 
 const style = {
     position: 'absolute',
@@ -72,19 +73,20 @@ const PostCard = ({ isLoading }) => {
                         <div
                             style={{
                                 width: '100%',
-                                height: 50,
+                                height: 250,
                                 marginTop: 5,
                                 marginLeft: 5,
                                 backgroundColor: '#F7F7F7',
                                 borderRadius: 20,
                                 padding: 10
                             }}
-                            onClick={() => handleOpen()}
+                            // onClick={() => handleOpen()}
                         >
-                            {auth.user.username}, widen out...
+                            <StatusPost />
+                            {/* {auth.user.username}, widen out... */}
                         </div>
                     </div>
-                    <div style={{ width: '100%' }}>
+                    {/* <div style={{ width: '100%' }}>
                         <Divider />
                     </div>
                     <div style={{ width: '100%', display: 'flex', justifyContent: 'flex-star', marginTop: 5 }}>
@@ -92,7 +94,7 @@ const PostCard = ({ isLoading }) => {
                             Camera
                         </Button>
                         <Button onClick={() => handleOpen()}>Photos</Button>
-                    </div>
+                    </div> */}
                 </Grid>
 
                 <Modal

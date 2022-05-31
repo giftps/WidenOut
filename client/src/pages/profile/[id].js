@@ -66,9 +66,6 @@ const Profile = () => {
                                                     <div className="col-md-8">
                                                         <GPostsSingle auth={auth} profile={profile} dispatch={dispatch} id={id} />
                                                     </div>
-                                                    <div className="col-md-4">
-                                                        <RightSideBarGroup />
-                                                    </div>
                                                 </div>
                                             </div>
                                         </>
@@ -91,11 +88,11 @@ const Profile = () => {
                                     ) : (
                                         <>
                                             <div className="container home row mx-0">
-                                                <div className="col-md-3" />
-                                                <div className="col-md-7">
+                                                {/* <div className="col-md-3" /> */}
+                                                <div>
                                                     <GPostsSingle auth={auth} profile={profile} dispatch={dispatch} id={id} />
                                                 </div>
-                                                <div className="col-md-3" />
+                                                {/* <div className="col-md-3" /> */}
                                             </div>
                                         </>
                                     )

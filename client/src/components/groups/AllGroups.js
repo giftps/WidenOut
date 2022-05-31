@@ -22,10 +22,10 @@ const AllGroups = () => {
                             style={{ textDecoration: 'none' }}
                         >
                             <div className="single_group">
-                                <img alt="img" src="https://bootdey.com/img/Content/avatar/avatar2.png" className="single-story-bg" />
+                                {/* <img alt="img" src="https://bootdey.com/img/Content/avatar/avatar2.png" className="single-story-bg" /> */}
                                 <div className="story-author">
-                                    <img src="https://bootdey.com/img/Content/avatar/avatar2.png" alt="logo" />
-                                    <p>{group.name}</p>
+                                    {/* <img src="https://bootdey.com/img/Content/avatar/avatar2.png" alt="logo" /> */}
+                                    <h3>{group.fullname}</h3>
                                 </div>
                             </div>
                         </Link>
